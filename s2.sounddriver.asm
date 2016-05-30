@@ -22,8 +22,8 @@ MusID_Unpause =		$7F+$80			; FF
 ; function using these variables
 id function ptr,((ptr-offset)/ptrsize+idstart)
 
-FixDriverBugs = 0
-OptimiseDriver = 0
+FixDriverBugs = 1
+OptimiseDriver = 1
 
 ; ---------------------------------------------------------------------------
 ; NOTES:
