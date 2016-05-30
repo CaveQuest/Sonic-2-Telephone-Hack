@@ -5,7 +5,7 @@
 
 SSRGScreen:
 		move.w	#$00FD,d0				; set music ID to "stop music"
-		jsr	PlaySound				; play ID
+		jsr	PlayMusic				; play ID
 		jsr	ClearPLC				; clear pattern load cues list
 		jsr	Pal_FadeFrom				; fade palettes out
 		jsr	ClearScreen				; clear the plane mappings
