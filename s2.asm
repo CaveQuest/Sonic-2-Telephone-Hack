@@ -666,7 +666,7 @@ Z80StartupCodeBegin: ; loc_2CA:
     dephase ; stop pretending
     CPU 68000	; switch back to 68000 code
     padding off ; unfortunately our flags got reset so we have to set them again...
-    listing off
+    listing purecode
     supmode on
     else ; due to an address range limitation I could work around but don't think is worth doing so:
 ;	message "Warning: using pre-assembled Z80 startup code."
@@ -86584,7 +86584,7 @@ Snd_Driver:
 
 	CPU 68000
 	padding off
-	listing off
+	listing purecode
 	supmode on
 	!org (Snd_Driver+Size_of_Snd_driver_guess) ; don't worry; I know what I'm doing
     else
