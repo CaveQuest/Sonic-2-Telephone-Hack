@@ -76,15 +76,6 @@ DAC_Null_Setup macro rate,dacptr
 	dc.w 	$0000,$0000
     endm
 
-; Setup a chain-linked invalid entry for a DAC sample.
-; The sample's length is correctly stored for the sample,
-; while the pointer (usually) goes towards the DAC pointer
-; entry of another DAC sample setup.
-DAC_Null_Chain macro rate,dacptr,linkptr
-	dc.b	rate
-	dc.w 	dacptr_Len,k68z80Pointer(linkptr+3-soundBankStart)
-    endm
-
 ; ===========================================================================
 ; Music Banks
 ; ===========================================================================
@@ -137,23 +128,23 @@ Snd_Credits:		include 	"sound/Music/Credits.asm"
 ; ---------------------------------------------------------------------------
 ; Music Bank 3
 ; ---------------------------------------------------------------------------
-Snd_Bank3_Start:	startBank
+;Snd_Bank3_Start:	startBank
 
-	finishBank
+;	finishBank
 
 ; ---------------------------------------------------------------------------
 ; Music Bank 4
 ; ---------------------------------------------------------------------------
-Snd_Bank4_Start:	startBank
+;Snd_Bank4_Start:	startBank
 
-	finishBank
+;	finishBank
 
 ; ---------------------------------------------------------------------------
 ; Music Bank 5
 ; ---------------------------------------------------------------------------
-Snd_Bank5_Start:	startBank
+;Snd_Bank5_Start:	startBank
 
-	finishBank
+;	finishBank
 
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
@@ -191,6 +182,12 @@ DAC_98_Setup:			DAC_Setup $0B,DAC_98_99_9A_Data
 DAC_99_Setup:			DAC_Setup $13,DAC_98_99_9A_Data
 DAC_9A_Setup:			DAC_Setup $16,DAC_98_99_9A_Data
 DAC_9B_Setup:			DAC_Setup $0C,DAC_9B_Data
+DAC_9C_Setup:			DAC_Setup $0A,DAC_9C_Data
+DAC_9D_Setup:			DAC_Setup $18,DAC_9D_Data
+DAC_9E_Setup:			DAC_Setup $18,DAC_9E_Data
+DAC_9F_Setup:			DAC_Setup $0C,DAC_9F_Data
+DAC_A0_Setup:			DAC_Setup $0C,DAC_A0_Data
+DAC_A1_Setup:			DAC_Setup $0A,DAC_A1_Data
 DAC_A2_Setup:			DAC_Setup $0A,DAC_A2_Data
 DAC_A3_Setup:			DAC_Setup $18,DAC_A3_Data
 DAC_A4_Setup:			DAC_Setup $18,DAC_A4_Data
@@ -226,12 +223,6 @@ DAC_C1_Setup:			DAC_Setup $0F,DAC_B4_C1_C2_C3_C4_Data
 DAC_C2_Setup:			DAC_Setup $11,DAC_B4_C1_C2_C3_C4_Data
 DAC_C3_Setup:			DAC_Setup $12,DAC_B4_C1_C2_C3_C4_Data
 DAC_C4_Setup:			DAC_Setup $0B,DAC_B4_C1_C2_C3_C4_Data
-DAC_9C_Setup:			DAC_Setup $0A,DAC_9C_Data
-DAC_9D_Setup:			DAC_Setup $18,DAC_9D_Data
-DAC_9E_Setup:			DAC_Setup $18,DAC_9E_Data
-DAC_9F_Setup:			DAC_Setup $0C,DAC_9F_Data
-DAC_A0_Setup:			DAC_Setup $0C,DAC_A0_Data
-DAC_A1_Setup:			DAC_Setup $0A,DAC_A1_Data
 ; ---------------------------------------------------------------------------
 
 DAC_86_Data:			DACBINCLUDE "sound/DAC/86.bin"
@@ -283,6 +274,12 @@ DAC_98_Setup2:			DAC_Null_Setup $0B,DAC_Invalid
 DAC_99_Setup2:			DAC_Null_Setup $13,DAC_Invalid
 DAC_9A_Setup2:			DAC_Null_Setup $16,DAC_Invalid
 DAC_9B_Setup2:			DAC_Null_Setup $0C,DAC_Invalid
+DAC_9C_Setup2:			DAC_Setup $0A,DAC_9C_Data
+DAC_9D_Setup2:			DAC_Setup $18,DAC_9D_Data
+DAC_9E_Setup2:			DAC_Setup $18,DAC_9E_Data
+DAC_9F_Setup2:			DAC_Setup $0C,DAC_9F_Data
+DAC_A0_Setup2:			DAC_Setup $0C,DAC_A0_Data
+DAC_A1_Setup2:			DAC_Setup $0A,DAC_A1_Data
 DAC_A2_Setup2:			DAC_Setup $0A,DAC_A2_Data
 DAC_A3_Setup2:			DAC_Setup $18,DAC_A3_Data
 DAC_A4_Setup2:			DAC_Setup $18,DAC_A4_Data
@@ -318,12 +315,6 @@ DAC_C1_Setup2:			DAC_Null_Setup $0F,DAC_Invalid
 DAC_C2_Setup2:			DAC_Null_Setup $11,DAC_Invalid
 DAC_C3_Setup2:			DAC_Null_Setup $12,DAC_Invalid
 DAC_C4_Setup2:			DAC_Null_Setup $0B,DAC_Invalid
-DAC_9C_Setup2:			DAC_Setup $0A,DAC_9C_Data
-DAC_9D_Setup2:			DAC_Setup $18,DAC_9D_Data
-DAC_9E_Setup2:			DAC_Setup $18,DAC_9E_Data
-DAC_9F_Setup2:			DAC_Setup $0C,DAC_9F_Data
-DAC_A0_Setup2:			DAC_Setup $0C,DAC_A0_Data
-DAC_A1_Setup2:			DAC_Setup $0A,DAC_A1_Data
 
 DAC_9C_Data:			DACBINCLUDE "sound/DAC/9C.bin"
 DAC_9D_Data:			DACBINCLUDE "sound/DAC/9D.bin"
@@ -4861,11 +4852,6 @@ z80_SFXPointers:
 ; ===========================================================================
 ; FM Universal Voice Bank
 ; ===========================================================================
-	align 17D8h
-	if $ <> 17D8h
-		fatal "The universal voice bank is not in a location where music can find it; any song using it will fail."
-	endif
-
 z80_UniVoiceBank:
 	; Synth Bass 2
 	    db  3Ch,   1,   0,   0,   0, 1Fh, 1Fh, 15h, 1Fh, 11h, 0Dh, 12h,   5
