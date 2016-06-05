@@ -366,8 +366,6 @@ zTrack STRUCT DOTS
 	FreqHigh:			ds.b 1	; S&K: 0Eh		; For FM/PSG channels
 	VoiceSongID:		ds.b 1	; S&K: 0Fh		; For using voices from a different song
 	Detune:			ds.b 1	; S&K: 10h	; In S&K, some places used 11h instead of 10h
-	Unk11h:			ds.b 1	; S&K: 11h
-					ds.b 5	; S&K: 12h-16h	; Unused
 	VolEnv:				ds.b 1	; S&K: 17h		; Used for dynamic volume adjustments
 	; ---------------------------------
 	; Alternate names for same offsets:
@@ -405,7 +403,7 @@ zTrack STRUCT DOTS
 	Stack_top:			ds.b 4	; S&K: 2Ch-2Fh	; Track stack; can be used by LoopCounters
 zTrack ENDSTRUCT
 ; ---------------------------------------------------------------------------
-z80_stack				=	$2000
+z80_stack				=	$2000-$331
 z80_stack_end				=	z80_stack-$60
 ; equates: standard (for Genesis games) addresses in the memory map
 zYM2612_A0				=	$4000
@@ -417,19 +415,13 @@ zPSG					=	$7F11
 zROMWindow				=	$8000
 ; ---------------------------------------------------------------------------
 ; z80 RAM:
-	if fix_sndbugs
-zDataStart				=	$1BF0
-	else
-zDataStart				=	$1C00	
-	endif
+zDataStart				=	z80_stack
 		phase zDataStart
 	if fix_sndbugs
 zSpecFM3Freqs				ds.b 8
 zSpecFM3FreqsSFX			ds.b 8
 	endif
-					ds.b 2	; unused
 zPalFlag:			ds.b 1
-					ds.b 1	; unused
 zPalDblUpdCounter:	ds.b 1
 zSoundQueue0:		ds.b 1
 zSoundQueue1:		ds.b 1
@@ -448,13 +440,8 @@ zPauseFlag:			ds.b 1
 zHaltFlag:			ds.b 1
 zFM3Settings:		ds.b 1	; Set twice, never read (is read in Z80 Type 1 for YM timer-related purposes)
 zTempoAccumulator:	ds.b 1
-					ds.b 1	; unused
-unk_1C15			ds.b 1	; Set twice, never read
 zFadeToPrevFlag:	ds.b 1
-unk_1C17:			ds.b 1	; Set once, never read
-unk_1C18:			ds.b 1	; Set twice, never read
 zUpdatingSFX:		ds.b 1
-					ds.b $A	; unused
 zCurrentTempo:		ds.b 1
 zContinuousSFX:		ds.b 1
 zContinuousSFXFlag:	ds.b 1
@@ -474,7 +461,6 @@ zTrackInitPos:		ds.b 2	; 2 bytes
 zVoiceTblPtr:		ds.b 2	; 2 bytes
 zSFXVoiceTblPtr:	ds.b 2	; 2 bytes
 zSFXTempoDivider:	ds.b 1
-					ds.b 2	; unused
 zSongBank:			ds.b 1	; Bits 15 to 22 of M68K bank address
 PlaySegaPCMFlag:	ds.b 1
 ; Now starts song and SFX z80 RAM
@@ -515,8 +501,8 @@ zSaveSongPSG1:	zTrack
 zSaveSongPSG2:	zTrack
 zSaveSongPSG3:	zTrack
 zTracksSaveEnd:
-	if * > z80_stack_end	; Don't declare more space than the RAM can contain!
-		fatal "The RAM variable declarations are too large. It's \{*-z80_stack_end}h bytes past the start of the bottom of the stack, at \{z80_stack_end}h."
+	if * > $2000	; Don't declare more space than the RAM can contain!
+		fatal "The RAM variable declarations are too large. It's \{*-$2000}h bytes past the end of Z80 RAM."
 	endif
 		dephase
 ; ---------------------------------------------------------------------------
@@ -1895,9 +1881,10 @@ zPlaySoundByIndex:
 zFadeEffects:
 		dw	zStopSFX						; E4h
 		dw	zFadeOutMusic					; E1h
-		dw	zMusicFade						; E2h
-		dw	zPSGSilenceAll					; E3h
-		dw	zFadeOutMusic					; E5h
+		dw	0						; E2h
+		dw	0					; E3h
+		dw	0					; E5h
+		dw	zStopSoundAndMusic
 ; ---------------------------------------------------------------------------
 ;sub_52E
 zStopSFX:
@@ -2662,6 +2649,8 @@ zDoMusicFadeIn:
 		ret
 ; End of function zDoMusicFadeIn
 
+zStopSoundAndMusic:
+		call	zStopSFX
 
 ; =============== S U B	R O U T	I N E =======================================
 ; Wipes music data and fades all FM, PSG and DAC channels.
@@ -4516,8 +4505,8 @@ zPlaySEGAPCM:
 		ld	a, (hl)							; a = next byte of SEGA PCM
 		ld	(zYM2612_D0), a					; Send to DAC
 		ld	a, (zMusicNumber)				; Check next song number
-		cp	SndID_StopSega					; Is it the command to stop playing SEGA PCM?
-		jr	z, .done						; Break the loop if yes
+		or	a					; Is it the command to stop playing SEGA PCM?
+		jr	nz, .done						; Break the loop if yes
 		nop
 		nop
 
@@ -4859,8 +4848,8 @@ z80_UniVoiceBank:
 	    db  20h, 36h, 35h, 30h, 31h,0DFh,0DFh, 9Fh, 9Fh,   7,   6,   9,   6
 		db         7,   6,   6,   8, 20h, 10h, 10h,0F8h, 19h, 37h, 13h, 80h				; 850
 
-	if $ > zDataStart
-		fatal "Your Z80 tables won't fit before its variables. It's \{$-zDataStart}h bytes past the start of the variables, at \{zDataStart}h"
+	if $ > z80_stack_end
+		fatal "Your Z80 tables won't fit before the stack. It's \{$-z80_stack_end}h bytes past the start of the z80_stack_end, at \{z80_stack_end}h"
 	endif
 
 ; ---------------------------------------------------------------------------
