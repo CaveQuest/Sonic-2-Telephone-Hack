@@ -393,7 +393,7 @@ smpsNoteFill macro val
 		dc.b	$FF,$0A,val
 	else
 		if (SonicDriverVer>=3)&&(SourceDriver<3)
-			dc.b	$FF,$08
+			dc.b	$FF,$08,val
 		elseif (SonicDriverVer<3)&&(SourceDriver>=3)
 			message "Note fill will not work as intended unless you multiply the fill value by the tempo divider or complain to Flamewing to add an appropriate coordination flag for it."
 		endif
