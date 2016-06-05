@@ -390,11 +390,11 @@ Two_player_mode =		ramaddr( $FFFFFFD8 ) ; flag (0 for main game)
 
 ; Values in these variables are passed to the sound driver during V-INT.
 ; They use a playlist index, not a sound test index.
-Music_to_play =			ramaddr( $FFFFFFE0 )
-SFX_to_play =			ramaddr( $FFFFFFE1 ) ; normal
-SFX_to_play_2 =			ramaddr( $FFFFFFE2 ) ; alternating stereo
-SFX_to_play_3 =			ramaddr( $FFFFFFE3 ) ; normal
-Music_to_play_2 =		ramaddr( $FFFFFFE4 ) ; alternate (higher priority?) slot
+;Music_to_play =			ramaddr( $FFFFFFE0 )
+;SFX_to_play =			ramaddr( $FFFFFFE1 ) ; normal
+;SFX_to_play_2 =			ramaddr( $FFFFFFE2 ) ; alternating stereo
+;SFX_to_play_3 =			ramaddr( $FFFFFFE3 ) ; normal
+;Music_to_play_2 =		ramaddr( $FFFFFFE4 ) ; alternate (higher priority?) slot
 
 Demo_mode_flag =		ramaddr( $FFFFFFF0 ) ; 1 if a demo is playing (2 bytes)
 Demo_number =			ramaddr( $FFFFFFF2 ) ; which demo will play next (2 bytes)
@@ -1708,10 +1708,12 @@ PauseGame:
 	move.b	(Ctrl_1_Press).w,d0 ; is Start button pressed?
 	or.b	(Ctrl_2_Press).w,d0 ; (either player)
 	andi.b	#$80,d0
-	beq.s	Pause_DoNothing	; if not, branch
+	beq.w	Pause_DoNothing	; if not, branch
 +
 	move.w	#1,(Game_paused).w	; freeze time
-	move.b	#-2,(Music_to_play).w	; pause music
+	stopZ80
+	move.b	#1,(Z80_RAM+zPauseFlag).l	; Pause the music
+	startZ80
 
 loc_13B2:
 	move.b	#$10,(Delay_Time).w
@@ -1738,7 +1740,9 @@ Pause_ChkStart:
 	beq.s	loc_13B2	; if not, branch
 
 loc_13F2:
-	move.b	#-1,(Music_to_play).w
+	stopZ80
+	move.b	#$80,(Z80_RAM+zPauseFlag).l	; Unpause music
+	startZ80
 ; loc_13F8:
 Unpause:
 	move.w	#0,(Game_paused).w
@@ -1749,7 +1753,9 @@ Pause_DoNothing:
 ; loc_1400:
 Pause_SlowMo:
 	move.w	#1,(Game_paused).w
-	move.b	#-1,(Music_to_play).w
+	stopZ80
+	move.b	#$80,(Z80_RAM+zPauseFlag).l	; Unpause music
+	startZ80
 	rts
 ; End of function PauseGame
 
@@ -6159,7 +6165,9 @@ loc_540C:
 ; ===========================================================================
 
 loc_541A:
-	move.b	#-1,(Music_to_play).w
+	stopZ80
+	move.b	#$80,(Z80_RAM+zPauseFlag).l	; Unpause music
+	startZ80
 	move.b	#8,(Delay_Time).w
 	bra.w	DelayProgram
 
