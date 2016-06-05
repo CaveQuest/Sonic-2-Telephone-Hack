@@ -3174,7 +3174,7 @@ cfSpindashRev:
 		ld	a, (hl)							; a = value of escalating transposition
 		add	a, (ix+zTrack.Transpose)		; Add in current track transposition
 		ld	(ix+zTrack.Transpose), a		; Store result as new track transposition
-		cp	10h								; Is the current transposition 10h?
+		cp	0Ch								; Is the current transposition 10h?
 		jp	z, .skip_rev					; Branch if yes
 		inc	(hl)							; Otherwise, increase escalating transposition
 
