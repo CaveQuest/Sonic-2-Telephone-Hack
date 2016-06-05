@@ -1637,9 +1637,9 @@ JmpTo_SoundDriverLoad
 ; else move d0 into Music_to_play_2.
 ; sub_135E:
 PlayMusic:
-		stopZ80
-		move.b	d0,(Z80_RAM+zMusicNumber).l
-		startZ80
+	stopZ80
+	move.b	d0,(Z80_RAM+zMusicNumber).l
+	startZ80
 	rts
 ; End of function PlayMusic
 
@@ -1652,21 +1652,21 @@ PlaySoundLocal:
 	bpl.s	Play_Sound_2_Done
 ; sub_1370
 PlaySound:
-		stopZ80
-		cmp.b	(Z80_RAM+zSFXNumber0).l,d0
-		beq.s	++
-		tst.b	(Z80_RAM+zSFXNumber0).l
-		bne.s	+
-		move.b	d0,(Z80_RAM+zSFXNumber0).l
-		startZ80
-		rts
+	stopZ80
+	cmp.b	(Z80_RAM+zSFXNumber0).l,d0
+	beq.s	++
+	tst.b	(Z80_RAM+zSFXNumber0).l
+	bne.s	+
+	move.b	d0,(Z80_RAM+zSFXNumber0).l
+	startZ80
+	rts
 +
-		move.b	d0,(Z80_RAM+zSFXNumber1).l
+	move.b	d0,(Z80_RAM+zSFXNumber1).l
 +
-		startZ80
+	startZ80
 
 Play_Sound_2_Done:
-		rts
+	rts
 ; End of function PlaySoundLocal
 
 
@@ -1674,9 +1674,22 @@ Play_Sound_2_Done:
 ; play a sound in alternating speakers (as in the ring collection sound)
 ; sub_1376:
 PlaySoundStereo:
-	move.b	d0,(SFX_to_play_2).w
+	stopZ80
+	move.b	d0,(Z80_RAM+zSFXNumber1).l
+	startZ80
 	rts
 ; End of function PlaySoundStereo
+
+
+; =============== S U B R O U T I N E =======================================
+
+
+Change_Music_Tempo:
+	stopZ80
+	move.b	d0,(Z80_RAM+zTempoSpeedup).l
+	startZ80
+	rts
+; End of function Change_Music_Tempo
 
 
 ; ---------------------------------------------------------------------------
@@ -23688,8 +23701,8 @@ loc_12A10:
 	move.w	#$80,(Tails_deceleration).w
 
 loc_12A22:
-	move.w	#$FB,d0
-	jmp	(PlayMusic).l	; Speed up tempo
+	moveq	#8,d0
+	jmp	(Change_Music_Tempo).l
 ; ===========================================================================
 
 shield_monitor:
@@ -32268,8 +32281,8 @@ Obj01_ChkShoes:		; Checks if Speed Shoes have expired and disables them if they 
 ; loc_1A14A:
 Obj01_RmvSpeed:
 	bclr	#2,status_secondary(a0)
-	move.w	#$7C+$80,d0	; Slow down tempo
-	jmp	(PlayMusic).l
+	moveq	#0,d0
+	jmp	(Change_Music_Tempo).l
 ; ---------------------------------------------------------------------------
 ; return_1A15A:
 Obj01_ExitChk:
@@ -34821,8 +34834,8 @@ Obj02_ChkShoes:		; Checks if Speed Shoes have expired and disables them if they 
 	move.w	#$80,(Tails_deceleration).w
 ; Obj02_RmvSpeed:
 	bclr	#2,status_secondary(a0)
-	move.w	#$7C+$80,d0	; Slow down tempo
-	jmp	(PlayMusic).l
+	moveq	#0,d0
+	jmp	(Change_Music_Tempo).l
 ; ===========================================================================
 ; return_1BAD2:
 Obj02_ExitChk:

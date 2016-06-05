@@ -11,8 +11,15 @@
 ; Constants
 ; ===========================================================================
 
+SonicDriverVer = 4
+use_s2_samples = 0
+use_s3_samples = 0
+use_sk_samples = 1
+use_s3d_samples = 0
+	include "sound/_smps2asm_inc.asm"
+
 ; Set this to 1 to fix some bugs in the driver.
-fix_sndbugs				=  0
+fix_sndbugs				=  1
 
 ; Function to make a little endian (z80) pointer
 k68z80Pointer function addr,((((addr&$7FFF)+$8000)<<8)&$FF00)+(((addr&$7FFF)+$8000)>>8)
@@ -86,50 +93,66 @@ DAC_Null_Chain macro rate,dacptr,linkptr
 ; ---------------------------------------------------------------------------
 ; Music Bank 1
 ; ---------------------------------------------------------------------------
-Snd_Bank1_Start:
-Snd_SKCredits:		binclude 	"Sound/Music/Credits.bin"
-Snd_GameOver:		binclude	"Sound/Music/Game Over.bin"
-Snd_Continue:		binclude	"Sound/Music/Continue.bin"
-Snd_Results:		binclude	"Sound/Music/Level Outro.bin"
-Snd_Invic:			binclude	"Sound/Music/Invincible.bin"
-Snd_Menu:			binclude	"Sound/Music/Menu.bin"
-Snd_FinalBoss:		binclude	"Sound/Music/Final Boss.bin"
-Snd_PresSega:		binclude	"Sound/Music/Game Complete.bin"
+Snd_Bank1_Start:	startBank
+Snd_2PResults:		include 	"sound/Music/Results screen 2p.asm"
+Snd_EHZ:		include 	"sound/Music/EHZ.asm"
+Snd_MCZ_2P:		include 	"sound/Music/MCZ_2p.asm"
+Snd_OOZ:		include 	"sound/Music/OOZ.asm"
+Snd_MTZ:		include 	"sound/Music/MTZ.asm"
+Snd_HTZ:		include 	"sound/Music/HTZ.asm"
+Snd_ARZ:		include 	"sound/Music/ARZ.asm"
+Snd_CNZ_2P:		include 	"sound/Music/CNZ_2p.asm"
+Snd_CNZ:		include 	"sound/Music/CNZ.asm"
+Snd_DEZ:		include 	"sound/Music/DEZ.asm"
+Snd_MCZ:		include 	"sound/Music/MCZ.asm"
+Snd_EHZ_2P:		include 	"sound/Music/EHZ_2p.asm"
+Snd_SCZ:		include 	"sound/Music/SCZ.asm"
+Snd_CPZ:		include 	"sound/Music/CPZ.asm"
+Snd_WFZ:		include 	"sound/Music/WFZ.asm"
+Snd_HPZ:		include 	"sound/Music/HPZ.asm"
+Snd_Options:		include 	"sound/Music/Options.asm"
+Snd_SpecStage:		include 	"sound/Music/SpecStg.asm"
+Snd_Boss:		include 	"sound/Music/Boss.asm"
+Snd_EndBoss:		include 	"sound/Music/End_Boss.asm"
+Snd_Ending:		include 	"sound/Music/Ending.asm"
+Snd_SuperSonic:		include 	"sound/Music/Supersonic.asm"
+Snd_Invincible:		include 	"sound/Music/Invincible.asm"
+Snd_ExtraLife:		include 	"sound/Music/Extra life.asm"
+Snd_Title:		include 	"sound/Music/Title screen.asm"
+Snd_EndLevel:		include 	"sound/Music/End of level.asm"
+Snd_GameOver:		include 	"sound/Music/Game over.asm"
+Snd_Continue:		include 	"sound/Music/Continue.asm"
+Snd_Emerald:		include 	"sound/Music/Got emerald.asm"
+Snd_Countdown:		include 	"sound/Music/Drowning.asm"
 
-Snd_Bank1_End
-
-	if Snd_Bank1_End - Snd_Bank1_Start > $8000
-		fatal "Snd_Bank1_Start must fit within $8000 bytes, but was $\{Snd_Bank1_End-Snd_Bank1_Start }. Try moving something to the other bank."
-	endif
-	if Snd_Bank1_End - Snd_Bank1_Start > Size_of_Snd_Bank1
-		fatal "Size_of_Snd_Bank1 = $\{Size_of_Snd_Bank1}, but you have $\{Snd_Bank1_End-Snd_Bank1_Start} bytes of music."
-	endif
+	finishBank
 
 ; ---------------------------------------------------------------------------
 ; Music Bank 2
 ; ---------------------------------------------------------------------------
 Snd_Bank2_Start:	startBank
-Snd_FBZ1:			binclude	"Sound/Music/FBZ1.bin"
-Snd_FBZ2:			binclude	"Sound/Music/FBZ2.bin"
-Snd_MHZ1:			binclude	"Sound/Music/MHZ1.bin"
-Snd_MHZ2:			binclude	"Sound/Music/MHZ2.bin"
-Snd_SOZ1:			binclude	"Sound/Music/SOZ1.bin"
-Snd_SOZ2:			binclude	"Sound/Music/SOZ2.bin"
-Snd_LRZ1:			binclude	"Sound/Music/LRZ1.bin"
-Snd_LRZ2:			binclude	"Sound/Music/LRZ2.bin"
-Snd_SSZ:			binclude	"Sound/Music/SSZ.bin"
-Snd_DEZ1:			binclude	"Sound/Music/DEZ1.bin"
-Snd_DEZ2:			binclude	"Sound/Music/DEZ2.bin"
-Snd_Minib_SK:		binclude	"Sound/Music/Miniboss.bin"
-Snd_Boss:			binclude	"Sound/Music/Zone Boss.bin"
-Snd_DDZ:			binclude	"Sound/Music/DDZ.bin"
-Snd_PachBonus:		binclude	"Sound/Music/Pachinko.bin"
-Snd_SpecialS:		binclude	"Sound/Music/Special Stage.bin"
-Snd_SlotBonus:		binclude	"Sound/Music/Slots.bin"
-Snd_Knux:			binclude	"Sound/Music/Knuckles.bin"
-Snd_Title:			binclude	"Sound/Music/Title.bin"
-Snd_1UP:			binclude	"Sound/Music/1UP.bin"
-Snd_Emerald:		binclude	"Sound/Music/Chaos Emerald.bin"
+Snd_Credits:		include 	"sound/Music/Credits.asm"
+
+	finishBank
+
+; ---------------------------------------------------------------------------
+; Music Bank 3
+; ---------------------------------------------------------------------------
+Snd_Bank3_Start:	startBank
+
+	finishBank
+
+; ---------------------------------------------------------------------------
+; Music Bank 4
+; ---------------------------------------------------------------------------
+Snd_Bank4_Start:	startBank
+
+	finishBank
+
+; ---------------------------------------------------------------------------
+; Music Bank 5
+; ---------------------------------------------------------------------------
+Snd_Bank5_Start:	startBank
 
 	finishBank
 
@@ -284,67 +307,21 @@ DAC_A0_Setup:			DAC_Setup $0C,DAC_A0_Data
 DAC_A1_Setup:			DAC_Setup $0A,DAC_A1_Data
 ; ---------------------------------------------------------------------------
 
-DAC_86_Data:			DACBINCLUDE "Sound/DAC/86.bin"
-DAC_81_Data:			DACBINCLUDE "Sound/DAC/81.bin"
-DAC_82_83_84_85_Data:	DACBINCLUDE "Sound/DAC/82-85.bin"
-DAC_94_95_96_97_Data:	DACBINCLUDE "Sound/DAC/94-97.bin"
-DAC_90_91_92_93_Data:	DACBINCLUDE "Sound/DAC/90-93.bin"
-DAC_88_Data:			DACBINCLUDE "Sound/DAC/88.bin"
-DAC_8A_8B_Data:			DACBINCLUDE "Sound/DAC/8A-8B.bin"
-DAC_8C_Data:			DACBINCLUDE "Sound/DAC/8C.bin"
-DAC_8D_8E_Data:			DACBINCLUDE "Sound/DAC/8D-8E.bin"
-DAC_87_Data:			DACBINCLUDE "Sound/DAC/87.bin"
-DAC_8F_Data:			DACBINCLUDE "Sound/DAC/8F.bin"
-DAC_89_Data:			DACBINCLUDE "Sound/DAC/89.bin"
-DAC_98_99_9A_Data:		DACBINCLUDE "Sound/DAC/98-9A.bin"
-DAC_9B_Data:			DACBINCLUDE "Sound/DAC/9B.bin"
-DAC_B2_B3_Data:			DACBINCLUDE "Sound/DAC/B2-B3.bin"
-
-	finishBank
-
-; ---------------------------------------------------------------------------
-; Music Bank 3
-; ---------------------------------------------------------------------------
-Snd_Bank3_Start:	startBank
-Snd_AIZ1:			binclude	"Sound/Music/AIZ1.bin"
-Snd_AIZ2:			binclude	"Sound/Music/AIZ2.bin"
-Snd_HCZ1:			binclude	"Sound/Music/HCZ1.bin"
-Snd_HCZ2:			binclude	"Sound/Music/HCZ2.bin"
-Snd_MGZ1:			binclude	"Sound/Music/MGZ1.bin"
-Snd_MGZ2:			binclude	"Sound/Music/MGZ2.bin"
-Snd_CNZ2:			binclude	"Sound/Music/CNZ2.bin"
-Snd_CNZ1:			binclude	"Sound/Music/CNZ1.bin"
-
-	finishBank
-
-; ---------------------------------------------------------------------------
-; Music Bank 4
-; ---------------------------------------------------------------------------
-Snd_Bank4_Start:	startBank
-Snd_ICZ2:			binclude	"Sound/Music/ICZ2.bin"
-Snd_ICZ1:			binclude	"Sound/Music/ICZ1.bin"
-Snd_LBZ2:			binclude	"Sound/Music/LBZ2.bin"
-Snd_LBZ1:			binclude	"Sound/Music/LBZ1.bin"
-
-	finishBank
-
-; ---------------------------------------------------------------------------
-; Music Bank 5
-; ---------------------------------------------------------------------------
-Snd_Bank5_Start:	startBank
-		org		soundBankStart+$AE8
-Snd_GumBonus:		binclude	"Sound/Music/Gum Ball Machine.bin"
-		org		soundBankStart+$19F7
-Snd_ALZ:			binclude	"Sound/Music/Azure Lake.bin"
-Snd_BPZ:			binclude	"Sound/Music/Balloon Park.bin"
-Snd_DPZ:			binclude	"Sound/Music/Desert Palace.bin"
-Snd_CGZ:			binclude	"Sound/Music/Chrome Gadget.bin"
-Snd_EMZ:			binclude	"Sound/Music/Endless Mine.bin"
-		org		soundBankStart+$6587
-Snd_S3Credits:		binclude	"Sound/Music/Sonic 3 Credits.bin"
-		org		soundBankStart+$75E4
-Snd_2PMenu:			binclude	"Sound/Music/Competition Menu.bin"	
-Snd_Drown:			binclude	"Sound/Music/Countdown.bin"
+DAC_86_Data:			DACBINCLUDE "sound/DAC/86.bin"
+DAC_81_Data:			DACBINCLUDE "sound/DAC/81.bin"
+DAC_82_83_84_85_Data:	DACBINCLUDE "sound/DAC/82-85.bin"
+DAC_94_95_96_97_Data:	DACBINCLUDE "sound/DAC/94-97.bin"
+DAC_90_91_92_93_Data:	DACBINCLUDE "sound/DAC/90-93.bin"
+DAC_88_Data:			DACBINCLUDE "sound/DAC/88.bin"
+DAC_8A_8B_Data:			DACBINCLUDE "sound/DAC/8A-8B.bin"
+DAC_8C_Data:			DACBINCLUDE "sound/DAC/8C.bin"
+DAC_8D_8E_Data:			DACBINCLUDE "sound/DAC/8D-8E.bin"
+DAC_87_Data:			DACBINCLUDE "sound/DAC/87.bin"
+DAC_8F_Data:			DACBINCLUDE "sound/DAC/8F.bin"
+DAC_89_Data:			DACBINCLUDE "sound/DAC/89.bin"
+DAC_98_99_9A_Data:		DACBINCLUDE "sound/DAC/98-9A.bin"
+DAC_9B_Data:			DACBINCLUDE "sound/DAC/9B.bin"
+DAC_B2_B3_Data:			DACBINCLUDE "sound/DAC/B2-B3.bin"
 
 	finishBank
 
@@ -494,21 +471,21 @@ DAC_A0_Setup2:			DAC_Setup $0C,DAC_A0_Data
 DAC_A1_Setup2:			DAC_Setup $0A,DAC_A1_Data
 
 Bank2_Filler:			cnop 	$7F7,soundBankStart
-DAC_9C_Data:			DACBINCLUDE "Sound/DAC/9C.bin"
-DAC_9D_Data:			DACBINCLUDE "Sound/DAC/9D.bin"
-DAC_9E_Data:			DACBINCLUDE "Sound/DAC/9E.bin"
-DAC_9F_Data:			DACBINCLUDE "Sound/DAC/9F.bin"
-DAC_A0_Data:			DACBINCLUDE "Sound/DAC/A0.bin"
-DAC_A1_Data:			DACBINCLUDE "Sound/DAC/A1.bin"
-DAC_A2_Data:			DACBINCLUDE "Sound/DAC/A2.bin"
-DAC_A3_Data:			DACBINCLUDE "Sound/DAC/A3.bin"
-DAC_A4_Data:			DACBINCLUDE "Sound/DAC/A4.bin"
-DAC_A5_Data:			DACBINCLUDE "Sound/DAC/A5.bin"
-DAC_A6_Data:			DACBINCLUDE "Sound/DAC/A6.bin"
-DAC_A7_Data:			DACBINCLUDE "Sound/DAC/A7.bin"
-DAC_A8_Data:			DACBINCLUDE "Sound/DAC/A8.bin"
-DAC_A9_Data:			DACBINCLUDE "Sound/DAC/A9.bin"
-DAC_AA_Data:			DACBINCLUDE "Sound/DAC/AA.bin"
+DAC_9C_Data:			DACBINCLUDE "sound/DAC/9C.bin"
+DAC_9D_Data:			DACBINCLUDE "sound/DAC/9D.bin"
+DAC_9E_Data:			DACBINCLUDE "sound/DAC/9E.bin"
+DAC_9F_Data:			DACBINCLUDE "sound/DAC/9F.bin"
+DAC_A0_Data:			DACBINCLUDE "sound/DAC/A0.bin"
+DAC_A1_Data:			DACBINCLUDE "sound/DAC/A1.bin"
+DAC_A2_Data:			DACBINCLUDE "sound/DAC/A2.bin"
+DAC_A3_Data:			DACBINCLUDE "sound/DAC/A3.bin"
+DAC_A4_Data:			DACBINCLUDE "sound/DAC/A4.bin"
+DAC_A5_Data:			DACBINCLUDE "sound/DAC/A5.bin"
+DAC_A6_Data:			DACBINCLUDE "sound/DAC/A6.bin"
+DAC_A7_Data:			DACBINCLUDE "sound/DAC/A7.bin"
+DAC_A8_Data:			DACBINCLUDE "sound/DAC/A8.bin"
+DAC_A9_Data:			DACBINCLUDE "sound/DAC/A9.bin"
+DAC_AA_Data:			DACBINCLUDE "sound/DAC/AA.bin"
 
 	finishBank
 
@@ -657,25 +634,25 @@ DAC_9F_Setup3:			DAC_Null_Setup $0C,DAC_9F_Data
 DAC_A0_Setup3:			DAC_Null_Setup $0C,DAC_A0_Data
 DAC_A1_Setup3:			DAC_Null_Setup $0A,DAC_A1_Data
 
-DAC_AB_Data:			DACBINCLUDE "Sound/DAC/AB.bin"
-DAC_AC_Data:			DACBINCLUDE "Sound/DAC/AC.bin"
-DAC_AD_AE_Data:			DACBINCLUDE "Sound/DAC/AD-AE.bin"
-DAC_AF_B0_Data:			DACBINCLUDE "Sound/DAC/AF-B0.bin"
+DAC_AB_Data:			DACBINCLUDE "sound/DAC/AB.bin"
+DAC_AC_Data:			DACBINCLUDE "sound/DAC/AC.bin"
+DAC_AD_AE_Data:			DACBINCLUDE "sound/DAC/AD-AE.bin"
+DAC_AF_B0_Data:			DACBINCLUDE "sound/DAC/AF-B0.bin"
 Bank3_Filler1:			cnop 	$28E0,soundBankStart
-DAC_B1_Data:			DACBINCLUDE "Sound/DAC/B1.bin"
+DAC_B1_Data:			DACBINCLUDE "sound/DAC/B1.bin"
 Bank3_Filler2:			cnop 	$3CAD,soundBankStart
-DAC_B4_C1_C2_C3_C4_Data:	DACBINCLUDE "Sound/DAC/B4C1-C4.bin"
-DAC_B5_Data:			DACBINCLUDE "Sound/DAC/B5.bin"
-DAC_B6_Data:			DACBINCLUDE "Sound/DAC/B6.bin"
-DAC_B7_Data:			DACBINCLUDE "Sound/DAC/B7.bin"
-DAC_B8_B9_Data:			DACBINCLUDE "Sound/DAC/B8-B9.bin"
-DAC_BA_Data:			DACBINCLUDE "Sound/DAC/BA.bin"
-DAC_BB_Data:			DACBINCLUDE "Sound/DAC/BB.bin"
-DAC_BC_Data:			DACBINCLUDE "Sound/DAC/BC.bin"
-DAC_BD_Data:			DACBINCLUDE "Sound/DAC/BD.bin"
-DAC_BE_Data:			DACBINCLUDE "Sound/DAC/BE.bin"
-DAC_BF_Data:			DACBINCLUDE "Sound/DAC/BF.bin"
-DAC_C0_Data:			DACBINCLUDE "Sound/DAC/C0.bin"
+DAC_B4_C1_C2_C3_C4_Data:	DACBINCLUDE "sound/DAC/B4C1-C4.bin"
+DAC_B5_Data:			DACBINCLUDE "sound/DAC/B5.bin"
+DAC_B6_Data:			DACBINCLUDE "sound/DAC/B6.bin"
+DAC_B7_Data:			DACBINCLUDE "sound/DAC/B7.bin"
+DAC_B8_B9_Data:			DACBINCLUDE "sound/DAC/B8-B9.bin"
+DAC_BA_Data:			DACBINCLUDE "sound/DAC/BA.bin"
+DAC_BB_Data:			DACBINCLUDE "sound/DAC/BB.bin"
+DAC_BC_Data:			DACBINCLUDE "sound/DAC/BC.bin"
+DAC_BD_Data:			DACBINCLUDE "sound/DAC/BD.bin"
+DAC_BE_Data:			DACBINCLUDE "sound/DAC/BE.bin"
+DAC_BF_Data:			DACBINCLUDE "sound/DAC/BF.bin"
+DAC_C0_Data:			DACBINCLUDE "sound/DAC/C0.bin"
 
 	finishBank
 
@@ -896,7 +873,7 @@ MusID_SKCredits			= 0FFh
 SndID__End				= 0F0h
 FadeID__First			= 0F8h
 FadeID__End				= 0FFh
-SndID_StopSega			= 0FEh
+SndID_StopSega			= 0FDh
 SndID_Sega				= 0FAh
 ; ---------------------------------------------------------------------------
 NoteRest				= 080h
@@ -3343,22 +3320,15 @@ zFMFrequencies:
 ; MUSIC BANKS
 ; ===========================================================================
 z80_MusicBanks:
-		db  zmake68kBank(Snd_AIZ1),zmake68kBank(Snd_AIZ2),zmake68kBank(Snd_HCZ1),zmake68kBank(Snd_HCZ2)
-		db  zmake68kBank(Snd_MGZ1),zmake68kBank(Snd_MGZ2),zmake68kBank(Snd_CNZ1),zmake68kBank(Snd_CNZ2)
-		db  zmake68kBank(Snd_FBZ1),zmake68kBank(Snd_FBZ2),zmake68kBank(Snd_ICZ1),zmake68kBank(Snd_ICZ2)
-		db  zmake68kBank(Snd_LBZ1),zmake68kBank(Snd_LBZ2),zmake68kBank(Snd_MHZ1),zmake68kBank(Snd_MHZ2)
+		db  zmake68kBank(Snd_2PResults),zmake68kBank(Snd_EHZ),zmake68kBank(Snd_MCZ_2P),zmake68kBank(Snd_OOZ)
+		db  zmake68kBank(Snd_MTZ),zmake68kBank(Snd_HTZ),zmake68kBank(Snd_ARZ),zmake68kBank(Snd_CNZ_2P)
+		db  zmake68kBank(Snd_CNZ),zmake68kBank(Snd_DEZ),zmake68kBank(Snd_MCZ),zmake68kBank(Snd_EHZ_2P)
+		db  zmake68kBank(Snd_SCZ),zmake68kBank(Snd_CPZ),zmake68kBank(Snd_WFZ),zmake68kBank(Snd_HPZ)
 
-		db  zmake68kBank(Snd_SOZ1),zmake68kBank(Snd_SOZ2),zmake68kBank(Snd_LRZ1),zmake68kBank(Snd_LRZ2)
-		db  zmake68kBank(Snd_SSZ),zmake68kBank(Snd_DEZ1),zmake68kBank(Snd_DEZ2),zmake68kBank(Snd_Minib_SK)
-		db  zmake68kBank(Snd_Boss),zmake68kBank(Snd_DDZ),zmake68kBank(Snd_PachBonus),zmake68kBank(Snd_SpecialS)
-		db  zmake68kBank(Snd_SlotBonus),zmake68kBank(Snd_GumBonus),zmake68kBank(Snd_Knux),zmake68kBank(Snd_ALZ)
-
-		db  zmake68kBank(Snd_BPZ),zmake68kBank(Snd_DPZ),zmake68kBank(Snd_CGZ),zmake68kBank(Snd_EMZ)
-		db  zmake68kBank(Snd_Title),zmake68kBank(Snd_S3Credits),zmake68kBank(Snd_GameOver),zmake68kBank(Snd_Continue)
-		db  zmake68kBank(Snd_Results),zmake68kBank(Snd_1UP),zmake68kBank(Snd_Emerald),zmake68kBank(Snd_Invic)
-		db  zmake68kBank(Snd_2PMenu),zmake68kBank(Snd_Minib_SK),zmake68kBank(Snd_Menu),zmake68kBank(Snd_FinalBoss)
-
-		db  zmake68kBank(Snd_Drown),zmake68kBank(Snd_PresSega),zmake68kBank(Snd_SKCredits)
+		db  zmake68kBank(Snd_Options),zmake68kBank(Snd_SpecStage),zmake68kBank(Snd_Boss),zmake68kBank(Snd_EndBoss)
+		db  zmake68kBank(Snd_Ending),zmake68kBank(Snd_SuperSonic),zmake68kBank(Snd_Invincible),zmake68kBank(Snd_ExtraLife)
+		db  zmake68kBank(Snd_Title),zmake68kBank(Snd_EndLevel),zmake68kBank(Snd_GameOver),zmake68kBank(Snd_Continue)
+		db  zmake68kBank(Snd_Emerald),zmake68kBank(Snd_Credits),zmake68kBank(Snd_Countdown)
 
 
 ; =============== S U B	R O U T	I N E =======================================
@@ -5012,22 +4982,15 @@ VolEnv_26:	db    0,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5, 83h
 ; ===========================================================================
 
 z80_MusicPointers:
-		dw	zmake68kPtr(Snd_AIZ1),zmake68kPtr(Snd_AIZ2),zmake68kPtr(Snd_HCZ1),zmake68kPtr(Snd_HCZ2)
-		dw	zmake68kPtr(Snd_MGZ1),zmake68kPtr(Snd_MGZ2),zmake68kPtr(Snd_CNZ1),zmake68kPtr(Snd_CNZ2)
-		dw	zmake68kPtr(Snd_FBZ1),zmake68kPtr(Snd_FBZ2),zmake68kPtr(Snd_ICZ1),zmake68kPtr(Snd_ICZ2)
-		dw	zmake68kPtr(Snd_LBZ1),zmake68kPtr(Snd_LBZ2),zmake68kPtr(Snd_MHZ1),zmake68kPtr(Snd_MHZ2)
+		dw  zmake68kPtr(Snd_2PResults),zmake68kPtr(Snd_EHZ),zmake68kPtr(Snd_MCZ_2P),zmake68kPtr(Snd_OOZ)
+		dw  zmake68kPtr(Snd_MTZ),zmake68kPtr(Snd_HTZ),zmake68kPtr(Snd_ARZ),zmake68kPtr(Snd_CNZ_2P)
+		dw  zmake68kPtr(Snd_CNZ),zmake68kPtr(Snd_DEZ),zmake68kPtr(Snd_MCZ),zmake68kPtr(Snd_EHZ_2P)
+		dw  zmake68kPtr(Snd_SCZ),zmake68kPtr(Snd_CPZ),zmake68kPtr(Snd_WFZ),zmake68kPtr(Snd_HPZ)
 
-		dw	zmake68kPtr(Snd_SOZ1),zmake68kPtr(Snd_SOZ2),zmake68kPtr(Snd_LRZ1),zmake68kPtr(Snd_LRZ2)
-		dw	zmake68kPtr(Snd_SSZ),zmake68kPtr(Snd_DEZ1),zmake68kPtr(Snd_DEZ2),zmake68kPtr(Snd_Minib_SK)
-		dw	zmake68kPtr(Snd_Boss),zmake68kPtr(Snd_DDZ),zmake68kPtr(Snd_PachBonus),zmake68kPtr(Snd_SpecialS)
-		dw	zmake68kPtr(Snd_SlotBonus),zmake68kPtr(Snd_GumBonus),zmake68kPtr(Snd_Knux),zmake68kPtr(Snd_ALZ)
-
-		dw	zmake68kPtr(Snd_BPZ),zmake68kPtr(Snd_DPZ),zmake68kPtr(Snd_CGZ),zmake68kPtr(Snd_EMZ)
-		dw	zmake68kPtr(Snd_Title),zmake68kPtr(Snd_S3Credits),zmake68kPtr(Snd_GameOver),zmake68kPtr(Snd_Continue)
-		dw	zmake68kPtr(Snd_Results),zmake68kPtr(Snd_1UP),zmake68kPtr(Snd_Emerald),zmake68kPtr(Snd_Invic)
-		dw	zmake68kPtr(Snd_2PMenu),zmake68kPtr(Snd_Minib_SK),zmake68kPtr(Snd_Menu),zmake68kPtr(Snd_FinalBoss)
-
-		dw	zmake68kPtr(Snd_Drown),zmake68kPtr(Snd_PresSega),zmake68kPtr(Snd_SKCredits)
+		dw  zmake68kPtr(Snd_Options),zmake68kPtr(Snd_SpecStage),zmake68kPtr(Snd_Boss),zmake68kPtr(Snd_EndBoss)
+		dw  zmake68kPtr(Snd_Ending),zmake68kPtr(Snd_SuperSonic),zmake68kPtr(Snd_Invincible),zmake68kPtr(Snd_ExtraLife)
+		dw  zmake68kPtr(Snd_Title),zmake68kPtr(Snd_EndLevel),zmake68kPtr(Snd_GameOver),zmake68kPtr(Snd_Continue)
+		dw  zmake68kPtr(Snd_Emerald),zmake68kPtr(Snd_Credits),zmake68kPtr(Snd_Countdown)
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
 ; SFX Pointers
@@ -5227,177 +5190,177 @@ Z80_Snd_Driver_End:
 ; ===========================================================================
 SndBank:			startBank
 
-SEGA_PCM:	binclude "Sound/Sega PCM.bin"
+SEGA_PCM:	binclude "sound/Sega PCM.bin"
 SEGA_PCM_End
 		align 2
-Sound_33:	binclude "Sound/SFX/33.bin"
-Sound_34:	binclude "Sound/SFX/34.bin"
-Sound_35:	binclude "Sound/SFX/35.bin"
-Sound_36:	binclude "Sound/SFX/36.bin"
-Sound_37:	binclude "Sound/SFX/37.bin"
-Sound_38:	binclude "Sound/SFX/38.bin"
-Sound_39:	binclude "Sound/SFX/39.bin"
-Sound_3A:	binclude "Sound/SFX/3A.bin"
-Sound_3B:	binclude "Sound/SFX/3B.bin"
-Sound_3C:	binclude "Sound/SFX/3C.bin"
-Sound_3D:	binclude "Sound/SFX/3D.bin"
-Sound_3E:	binclude "Sound/SFX/3E.bin"
-Sound_3F:	binclude "Sound/SFX/3F.bin"
-Sound_40:	binclude "Sound/SFX/40.bin"
-Sound_41:	binclude "Sound/SFX/41.bin"
-Sound_42:	binclude "Sound/SFX/42.bin"
-Sound_43:	binclude "Sound/SFX/43.bin"
-Sound_44:	binclude "Sound/SFX/44.bin"
-Sound_45:	binclude "Sound/SFX/45.bin"
-Sound_46:	binclude "Sound/SFX/46.bin"
-Sound_47:	binclude "Sound/SFX/47.bin"
-Sound_48:	binclude "Sound/SFX/48.bin"
-Sound_49:	binclude "Sound/SFX/49.bin"
-Sound_4A:	binclude "Sound/SFX/4A.bin"
-Sound_4B:	binclude "Sound/SFX/4B.bin"
-Sound_4C:	binclude "Sound/SFX/4C.bin"
-Sound_4D:	binclude "Sound/SFX/4D.bin"
-Sound_4E:	binclude "Sound/SFX/4E.bin"
-Sound_4F:	binclude "Sound/SFX/4F.bin"
-Sound_50:	binclude "Sound/SFX/50.bin"
-Sound_51:	binclude "Sound/SFX/51.bin"
-Sound_52:	binclude "Sound/SFX/52.bin"
-Sound_53:	binclude "Sound/SFX/53.bin"
-Sound_54:	binclude "Sound/SFX/54.bin"
-Sound_55:	binclude "Sound/SFX/55.bin"
-Sound_56:	binclude "Sound/SFX/56.bin"
-Sound_57:	binclude "Sound/SFX/57.bin"
-Sound_58:	binclude "Sound/SFX/58.bin"
-Sound_59:	binclude "Sound/SFX/59.bin"
-Sound_5A:	binclude "Sound/SFX/5A.bin"
-Sound_5B:	binclude "Sound/SFX/5B.bin"
-Sound_5C:	binclude "Sound/SFX/5C.bin"
-Sound_5D:	binclude "Sound/SFX/5D.bin"
-Sound_5E:	binclude "Sound/SFX/5E.bin"
-Sound_5F:	binclude "Sound/SFX/5F.bin"
-Sound_60:	binclude "Sound/SFX/60.bin"
-Sound_61:	binclude "Sound/SFX/61.bin"
-Sound_62:	binclude "Sound/SFX/62.bin"
-Sound_63:	binclude "Sound/SFX/63.bin"
-Sound_64:	binclude "Sound/SFX/64.bin"
-Sound_65:	binclude "Sound/SFX/65.bin"
-Sound_66:	binclude "Sound/SFX/66.bin"
-Sound_67:	binclude "Sound/SFX/67.bin"
-Sound_68:	binclude "Sound/SFX/68.bin"
-Sound_69:	binclude "Sound/SFX/69.bin"
-Sound_6A:	binclude "Sound/SFX/6A.bin"
-Sound_6B:	binclude "Sound/SFX/6B.bin"
-Sound_6C:	binclude "Sound/SFX/6C.bin"
-Sound_6D:	binclude "Sound/SFX/6D.bin"
-Sound_6E:	binclude "Sound/SFX/6E.bin"
-Sound_6F:	binclude "Sound/SFX/6F.bin"
-Sound_70:	binclude "Sound/SFX/70.bin"
-Sound_71:	binclude "Sound/SFX/71.bin"
-Sound_72:	binclude "Sound/SFX/72.bin"
-Sound_73:	binclude "Sound/SFX/73.bin"
-Sound_74:	binclude "Sound/SFX/74.bin"
-Sound_75:	binclude "Sound/SFX/75.bin"
-Sound_76:	binclude "Sound/SFX/76.bin"
-Sound_77:	binclude "Sound/SFX/77.bin"
-Sound_78:	binclude "Sound/SFX/78.bin"
-Sound_79:	binclude "Sound/SFX/79.bin"
-Sound_7A:	binclude "Sound/SFX/7A.bin"
-Sound_7B:	binclude "Sound/SFX/7B.bin"
-Sound_7C:	binclude "Sound/SFX/7C.bin"
-Sound_7D:	binclude "Sound/SFX/7D.bin"
-Sound_7E:	binclude "Sound/SFX/7E.bin"
-Sound_7F:	binclude "Sound/SFX/7F.bin"
-Sound_80:	binclude "Sound/SFX/80.bin"
-Sound_81:	binclude "Sound/SFX/81.bin"
-Sound_82:	binclude "Sound/SFX/82.bin"
-Sound_83:	binclude "Sound/SFX/83.bin"
-Sound_84:	binclude "Sound/SFX/84.bin"
-Sound_85:	binclude "Sound/SFX/85.bin"
-Sound_86:	binclude "Sound/SFX/86.bin"
-Sound_87:	binclude "Sound/SFX/87.bin"
-Sound_88:	binclude "Sound/SFX/88.bin"
-Sound_89:	binclude "Sound/SFX/89.bin"
-Sound_8A:	binclude "Sound/SFX/8A.bin"
-Sound_8B:	binclude "Sound/SFX/8B.bin"
-Sound_8C:	binclude "Sound/SFX/8C.bin"
-Sound_8D:	binclude "Sound/SFX/8D.bin"
-Sound_8E:	binclude "Sound/SFX/8E.bin"
-Sound_8F:	binclude "Sound/SFX/8F.bin"
-Sound_90:	binclude "Sound/SFX/90.bin"
-Sound_91:	binclude "Sound/SFX/91.bin"
-Sound_92:	binclude "Sound/SFX/92.bin"
-Sound_93:	binclude "Sound/SFX/93.bin"
-Sound_94:	binclude "Sound/SFX/94.bin"
-Sound_95:	binclude "Sound/SFX/95.bin"
-Sound_96:	binclude "Sound/SFX/96.bin"
-Sound_97:	binclude "Sound/SFX/97.bin"
-Sound_98:	binclude "Sound/SFX/98.bin"
-Sound_99:	binclude "Sound/SFX/99.bin"
-Sound_9A:	binclude "Sound/SFX/9A.bin"
-Sound_9B:	binclude "Sound/SFX/9B.bin"
-Sound_9C:	binclude "Sound/SFX/9C.bin"
-Sound_9D:	binclude "Sound/SFX/9D.bin"
-Sound_9E:	binclude "Sound/SFX/9E.bin"
-Sound_9F:	binclude "Sound/SFX/9F.bin"
-Sound_A0:	binclude "Sound/SFX/A0.bin"
-Sound_A1:	binclude "Sound/SFX/A1.bin"
-Sound_A2:	binclude "Sound/SFX/A2.bin"
-Sound_A3:	binclude "Sound/SFX/A3.bin"
-Sound_A4:	binclude "Sound/SFX/A4.bin"
-Sound_A5:	binclude "Sound/SFX/A5.bin"
-Sound_A6:	binclude "Sound/SFX/A6.bin"
-Sound_A7:	binclude "Sound/SFX/A7.bin"
-Sound_A8:	binclude "Sound/SFX/A8.bin"
-Sound_A9:	binclude "Sound/SFX/A9.bin"
-Sound_AA:	binclude "Sound/SFX/AA.bin"
-Sound_AB:	binclude "Sound/SFX/AB.bin"
-Sound_AC:	binclude "Sound/SFX/AC.bin"
-Sound_AD:	binclude "Sound/SFX/AD.bin"
-Sound_AE:	binclude "Sound/SFX/AE.bin"
-Sound_AF:	binclude "Sound/SFX/AF.bin"
-Sound_B0:	binclude "Sound/SFX/B0.bin"
-Sound_B1:	binclude "Sound/SFX/B1.bin"
-Sound_B2:	binclude "Sound/SFX/B2.bin"
-Sound_B3:	binclude "Sound/SFX/B3.bin"
-Sound_B4:	binclude "Sound/SFX/B4.bin"
-Sound_B5:	binclude "Sound/SFX/B5.bin"
-Sound_B6:	binclude "Sound/SFX/B6.bin"
-Sound_B7:	binclude "Sound/SFX/B7.bin"
-Sound_B8:	binclude "Sound/SFX/B8.bin"
-Sound_B9:	binclude "Sound/SFX/B9.bin"
-Sound_BA:	binclude "Sound/SFX/BA.bin"
-Sound_BB:	binclude "Sound/SFX/BB.bin"
-Sound_BC:	binclude "Sound/SFX/BC.bin"
-Sound_BD:	binclude "Sound/SFX/BD.bin"
-Sound_BE:	binclude "Sound/SFX/BE.bin"
-Sound_BF:	binclude "Sound/SFX/BF.bin"
-Sound_C0:	binclude "Sound/SFX/C0.bin"
-Sound_C1:	binclude "Sound/SFX/C1.bin"
-Sound_C2:	binclude "Sound/SFX/C2.bin"
-Sound_C3:	binclude "Sound/SFX/C3.bin"
-Sound_C4:	binclude "Sound/SFX/C4.bin"
-Sound_C5:	binclude "Sound/SFX/C5.bin"
-Sound_C6:	binclude "Sound/SFX/C6.bin"
-Sound_C7:	binclude "Sound/SFX/C7.bin"
-Sound_C8:	binclude "Sound/SFX/C8.bin"
-Sound_C9:	binclude "Sound/SFX/C9.bin"
-Sound_CA:	binclude "Sound/SFX/CA.bin"
-Sound_CB:	binclude "Sound/SFX/CB.bin"
-Sound_CC:	binclude "Sound/SFX/CC.bin"
-Sound_CD:	binclude "Sound/SFX/CD.bin"
-Sound_CE:	binclude "Sound/SFX/CE.bin"
-Sound_CF:	binclude "Sound/SFX/CF.bin"
-Sound_D0:	binclude "Sound/SFX/D0.bin"
-Sound_D1:	binclude "Sound/SFX/D1.bin"
-Sound_D2:	binclude "Sound/SFX/D2.bin"
-Sound_D3:	binclude "Sound/SFX/D3.bin"
-Sound_D4:	binclude "Sound/SFX/D4.bin"
-Sound_D5:	binclude "Sound/SFX/D5.bin"
-Sound_D6:	binclude "Sound/SFX/D6.bin"
-Sound_D7:	binclude "Sound/SFX/D7.bin"
-Sound_D8:	binclude "Sound/SFX/D8.bin"
-Sound_D9:	binclude "Sound/SFX/D9.bin"
-Sound_DA:	binclude "Sound/SFX/DA.bin"
-Sound_DB:	binclude "Sound/SFX/DB.bin"
+Sound_33:	binclude "sound/SFX/33.bin"
+Sound_34:	binclude "sound/SFX/34.bin"
+Sound_35:	binclude "sound/SFX/35.bin"
+Sound_36:	binclude "sound/SFX/36.bin"
+Sound_37:	binclude "sound/SFX/37.bin"
+Sound_38:	binclude "sound/SFX/38.bin"
+Sound_39:	binclude "sound/SFX/39.bin"
+Sound_3A:	binclude "sound/SFX/3A.bin"
+Sound_3B:	binclude "sound/SFX/3B.bin"
+Sound_3C:	binclude "sound/SFX/3C.bin"
+Sound_3D:	binclude "sound/SFX/3D.bin"
+Sound_3E:	binclude "sound/SFX/3E.bin"
+Sound_3F:	binclude "sound/SFX/3F.bin"
+Sound_40:	binclude "sound/SFX/40.bin"
+Sound_41:	binclude "sound/SFX/41.bin"
+Sound_42:	binclude "sound/SFX/42.bin"
+Sound_43:	binclude "sound/SFX/43.bin"
+Sound_44:	binclude "sound/SFX/44.bin"
+Sound_45:	binclude "sound/SFX/45.bin"
+Sound_46:	binclude "sound/SFX/46.bin"
+Sound_47:	binclude "sound/SFX/47.bin"
+Sound_48:	binclude "sound/SFX/48.bin"
+Sound_49:	binclude "sound/SFX/49.bin"
+Sound_4A:	binclude "sound/SFX/4A.bin"
+Sound_4B:	binclude "sound/SFX/4B.bin"
+Sound_4C:	binclude "sound/SFX/4C.bin"
+Sound_4D:	binclude "sound/SFX/4D.bin"
+Sound_4E:	binclude "sound/SFX/4E.bin"
+Sound_4F:	binclude "sound/SFX/4F.bin"
+Sound_50:	binclude "sound/SFX/50.bin"
+Sound_51:	binclude "sound/SFX/51.bin"
+Sound_52:	binclude "sound/SFX/52.bin"
+Sound_53:	binclude "sound/SFX/53.bin"
+Sound_54:	binclude "sound/SFX/54.bin"
+Sound_55:	binclude "sound/SFX/55.bin"
+Sound_56:	binclude "sound/SFX/56.bin"
+Sound_57:	binclude "sound/SFX/57.bin"
+Sound_58:	binclude "sound/SFX/58.bin"
+Sound_59:	binclude "sound/SFX/59.bin"
+Sound_5A:	binclude "sound/SFX/5A.bin"
+Sound_5B:	binclude "sound/SFX/5B.bin"
+Sound_5C:	binclude "sound/SFX/5C.bin"
+Sound_5D:	binclude "sound/SFX/5D.bin"
+Sound_5E:	binclude "sound/SFX/5E.bin"
+Sound_5F:	binclude "sound/SFX/5F.bin"
+Sound_60:	binclude "sound/SFX/60.bin"
+Sound_61:	binclude "sound/SFX/61.bin"
+Sound_62:	binclude "sound/SFX/62.bin"
+Sound_63:	binclude "sound/SFX/63.bin"
+Sound_64:	binclude "sound/SFX/64.bin"
+Sound_65:	binclude "sound/SFX/65.bin"
+Sound_66:	binclude "sound/SFX/66.bin"
+Sound_67:	binclude "sound/SFX/67.bin"
+Sound_68:	binclude "sound/SFX/68.bin"
+Sound_69:	binclude "sound/SFX/69.bin"
+Sound_6A:	binclude "sound/SFX/6A.bin"
+Sound_6B:	binclude "sound/SFX/6B.bin"
+Sound_6C:	binclude "sound/SFX/6C.bin"
+Sound_6D:	binclude "sound/SFX/6D.bin"
+Sound_6E:	binclude "sound/SFX/6E.bin"
+Sound_6F:	binclude "sound/SFX/6F.bin"
+Sound_70:	binclude "sound/SFX/70.bin"
+Sound_71:	binclude "sound/SFX/71.bin"
+Sound_72:	binclude "sound/SFX/72.bin"
+Sound_73:	binclude "sound/SFX/73.bin"
+Sound_74:	binclude "sound/SFX/74.bin"
+Sound_75:	binclude "sound/SFX/75.bin"
+Sound_76:	binclude "sound/SFX/76.bin"
+Sound_77:	binclude "sound/SFX/77.bin"
+Sound_78:	binclude "sound/SFX/78.bin"
+Sound_79:	binclude "sound/SFX/79.bin"
+Sound_7A:	binclude "sound/SFX/7A.bin"
+Sound_7B:	binclude "sound/SFX/7B.bin"
+Sound_7C:	binclude "sound/SFX/7C.bin"
+Sound_7D:	binclude "sound/SFX/7D.bin"
+Sound_7E:	binclude "sound/SFX/7E.bin"
+Sound_7F:	binclude "sound/SFX/7F.bin"
+Sound_80:	binclude "sound/SFX/80.bin"
+Sound_81:	binclude "sound/SFX/81.bin"
+Sound_82:	binclude "sound/SFX/82.bin"
+Sound_83:	binclude "sound/SFX/83.bin"
+Sound_84:	binclude "sound/SFX/84.bin"
+Sound_85:	binclude "sound/SFX/85.bin"
+Sound_86:	binclude "sound/SFX/86.bin"
+Sound_87:	binclude "sound/SFX/87.bin"
+Sound_88:	binclude "sound/SFX/88.bin"
+Sound_89:	binclude "sound/SFX/89.bin"
+Sound_8A:	binclude "sound/SFX/8A.bin"
+Sound_8B:	binclude "sound/SFX/8B.bin"
+Sound_8C:	binclude "sound/SFX/8C.bin"
+Sound_8D:	binclude "sound/SFX/8D.bin"
+Sound_8E:	binclude "sound/SFX/8E.bin"
+Sound_8F:	binclude "sound/SFX/8F.bin"
+Sound_90:	binclude "sound/SFX/90.bin"
+Sound_91:	binclude "sound/SFX/91.bin"
+Sound_92:	binclude "sound/SFX/92.bin"
+Sound_93:	binclude "sound/SFX/93.bin"
+Sound_94:	binclude "sound/SFX/94.bin"
+Sound_95:	binclude "sound/SFX/95.bin"
+Sound_96:	binclude "sound/SFX/96.bin"
+Sound_97:	binclude "sound/SFX/97.bin"
+Sound_98:	binclude "sound/SFX/98.bin"
+Sound_99:	binclude "sound/SFX/99.bin"
+Sound_9A:	binclude "sound/SFX/9A.bin"
+Sound_9B:	binclude "sound/SFX/9B.bin"
+Sound_9C:	binclude "sound/SFX/9C.bin"
+Sound_9D:	binclude "sound/SFX/9D.bin"
+Sound_9E:	binclude "sound/SFX/9E.bin"
+Sound_9F:	binclude "sound/SFX/9F.bin"
+Sound_A0:	binclude "sound/SFX/A0.bin"
+Sound_A1:	binclude "sound/SFX/A1.bin"
+Sound_A2:	binclude "sound/SFX/A2.bin"
+Sound_A3:	binclude "sound/SFX/A3.bin"
+Sound_A4:	binclude "sound/SFX/A4.bin"
+Sound_A5:	binclude "sound/SFX/A5.bin"
+Sound_A6:	binclude "sound/SFX/A6.bin"
+Sound_A7:	binclude "sound/SFX/A7.bin"
+Sound_A8:	binclude "sound/SFX/A8.bin"
+Sound_A9:	binclude "sound/SFX/A9.bin"
+Sound_AA:	binclude "sound/SFX/AA.bin"
+Sound_AB:	binclude "sound/SFX/AB.bin"
+Sound_AC:	binclude "sound/SFX/AC.bin"
+Sound_AD:	binclude "sound/SFX/AD.bin"
+Sound_AE:	binclude "sound/SFX/AE.bin"
+Sound_AF:	binclude "sound/SFX/AF.bin"
+Sound_B0:	binclude "sound/SFX/B0.bin"
+Sound_B1:	binclude "sound/SFX/B1.bin"
+Sound_B2:	binclude "sound/SFX/B2.bin"
+Sound_B3:	binclude "sound/SFX/B3.bin"
+Sound_B4:	binclude "sound/SFX/B4.bin"
+Sound_B5:	binclude "sound/SFX/B5.bin"
+Sound_B6:	binclude "sound/SFX/B6.bin"
+Sound_B7:	binclude "sound/SFX/B7.bin"
+Sound_B8:	binclude "sound/SFX/B8.bin"
+Sound_B9:	binclude "sound/SFX/B9.bin"
+Sound_BA:	binclude "sound/SFX/BA.bin"
+Sound_BB:	binclude "sound/SFX/BB.bin"
+Sound_BC:	binclude "sound/SFX/BC.bin"
+Sound_BD:	binclude "sound/SFX/BD.bin"
+Sound_BE:	binclude "sound/SFX/BE.bin"
+Sound_BF:	binclude "sound/SFX/BF.bin"
+Sound_C0:	binclude "sound/SFX/C0.bin"
+Sound_C1:	binclude "sound/SFX/C1.bin"
+Sound_C2:	binclude "sound/SFX/C2.bin"
+Sound_C3:	binclude "sound/SFX/C3.bin"
+Sound_C4:	binclude "sound/SFX/C4.bin"
+Sound_C5:	binclude "sound/SFX/C5.bin"
+Sound_C6:	binclude "sound/SFX/C6.bin"
+Sound_C7:	binclude "sound/SFX/C7.bin"
+Sound_C8:	binclude "sound/SFX/C8.bin"
+Sound_C9:	binclude "sound/SFX/C9.bin"
+Sound_CA:	binclude "sound/SFX/CA.bin"
+Sound_CB:	binclude "sound/SFX/CB.bin"
+Sound_CC:	binclude "sound/SFX/CC.bin"
+Sound_CD:	binclude "sound/SFX/CD.bin"
+Sound_CE:	binclude "sound/SFX/CE.bin"
+Sound_CF:	binclude "sound/SFX/CF.bin"
+Sound_D0:	binclude "sound/SFX/D0.bin"
+Sound_D1:	binclude "sound/SFX/D1.bin"
+Sound_D2:	binclude "sound/SFX/D2.bin"
+Sound_D3:	binclude "sound/SFX/D3.bin"
+Sound_D4:	binclude "sound/SFX/D4.bin"
+Sound_D5:	binclude "sound/SFX/D5.bin"
+Sound_D6:	binclude "sound/SFX/D6.bin"
+Sound_D7:	binclude "sound/SFX/D7.bin"
+Sound_D8:	binclude "sound/SFX/D8.bin"
+Sound_D9:	binclude "sound/SFX/D9.bin"
+Sound_DA:	binclude "sound/SFX/DA.bin"
+Sound_DB:	binclude "sound/SFX/DB.bin"
 
 	finishBank
