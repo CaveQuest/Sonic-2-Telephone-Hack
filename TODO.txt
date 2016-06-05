@@ -1,0 +1,2 @@
+The new EHZ has a serious problem of using obj25 instead of actual rings
+The new EHZ is littered with leftover objects from the original EHZ
