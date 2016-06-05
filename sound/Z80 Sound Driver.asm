@@ -403,7 +403,7 @@ zTrack STRUCT DOTS
 	Stack_top:			ds.b 4	; S&K: 2Ch-2Fh	; Track stack; can be used by LoopCounters
 zTrack ENDSTRUCT
 ; ---------------------------------------------------------------------------
-z80_stack				=	$2000-$331
+z80_stack				=	$2000-$332
 z80_stack_end				=	z80_stack-$60
 ; equates: standard (for Genesis games) addresses in the memory map
 zYM2612_A0				=	$4000
@@ -447,6 +447,7 @@ zContinuousSFX:		ds.b 1
 zContinuousSFXFlag:	ds.b 1
 zSpindashRev:		ds.b 1
 zRingSpeaker:		ds.b 1
+zGloopFlag:		ds.b 1
 zFadeInTimeout:		ds.b 1
 zVoiceTblPtrSave:	ds.b 2	; For 1-up
 zCurrentTempoSave:	ds.b 1	; For 1-up
@@ -518,7 +519,8 @@ MusID_1UP				= 98h
 MusID_Emerald			= 9Dh
 MusID__End				= 0A0h
 SndID__First			= MusID__End
-SndID_Ring				= SndID__First+15h
+SndID_Ring				= 0B5h
+SndID_Gloop			= 0DAh
 SndID_Spindash			= 0E0h
 SndID__FirstContinuous	= 0FFh
 MusID_SKCredits			= 0FFh
@@ -2128,13 +2130,23 @@ zPSGInitBytes:
 zPlaySound_CheckRing:
 		sub	SndID__First					; Make it a 0-based index
 		cp	SndID_Ring-SndID__First								; Is it the ring sound?
-		jp	nz, zPlaySound_Bankswitch		; Branch if not
+		jr	nz, zPlaySound_CheckGloop		; Branch if not
 		ld	a, (zRingSpeaker)				; Get speaker on which ring sound is played
 		xor	1								; Toggle bit 0
 		ld	(zRingSpeaker), a				; Save it
 		ld	a,2Eh
-		jr	nz,zPlaySound_Bankswitch
+		jr	nz,zPlaySound_CheckGloop
 		ld	a,15h
+
+zPlaySound_CheckGloop:
+		cp	SndID_Gloop-SndID__First								; Is it the ring sound?
+		jr	nz, zPlaySound_Bankswitch
+		ld	a, (zGloopFlag)
+		cpl
+		ld	(zGloopFlag), a
+		or	a
+		ret	z
+		ld	a,SndID_Gloop-SndID__First
 
 ;loc_6B7
 zPlaySound_Bankswitch:
