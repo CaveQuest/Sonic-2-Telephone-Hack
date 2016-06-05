@@ -815,6 +815,20 @@ zFMSetFreq:
 	jr	z,zFMDoRest		; If this is a rest, jump to zFMDoRest
 	add	a,(ix+zTrack.Transpose)		; Add current channel transpose (coord flag E9)
 	add	a,a				; Offset into Frequency table...
+    if OptimiseDriver
+	ld	d,12*2			; 12 notes per octave
+	ld	c,0			; clear c (will hold octave bits)
+
+-	sub	d			; Subtract 1 octave from the note
+	jr	c,+			; If this is less than zero, we are done
+	inc	c			; One octave up
+	jr	-
++
+	add	a,d			; Add 1 octave back (so note index is positive)
+	sla	c
+	sla	c
+	sla	c			; multiply octave value by 8, to get final octave bits
+    endif
 	add	a,zFrequencies&0FFh
 	ld	(zloc_292+2),a	; store into the instruction after zloc_292 (self-modifying code)
 ;	ld	d,a
@@ -824,7 +838,13 @@ zFMSetFreq:
 zloc_292:
 	ld	de,(zFrequencies)	; Stores frequency into "de"
 	ld	(ix+zTrack.FreqLow),e		; Frequency low byte   -> trackPtr + 0Dh
+    if OptimiseDriver
+	ld	a,d
+	or	c
+	ld	(ix+zTrack.FreqHigh),a		; Frequency high byte  -> trackPtr + 0Eh
+    else
 	ld	(ix+zTrack.FreqHigh),d		; Frequency high byte  -> trackPtr + 0Eh
+    endif
 	ret
 ; ---------------------------------------------------------------------------
 
@@ -964,15 +984,12 @@ zDoModulation:
 ; zword_359:
 	ensure1byteoffset 8Ch
 zPSGFrequencies:
-	dw	356h,  326h, 2F9h, 2CEh, 2A5h, 280h, 25Ch, 23Ah
-	dw	21Ah,  1FBh, 1DFh, 1C4h, 1ABh, 193h, 17Dh, 167h
-	dw	153h,  140h, 12Eh, 11Dh, 10Dh, 0FEh, 0EFh, 0E2h
-	dw	0D6h,  0C9h, 0BEh, 0B4h, 0A9h, 0A0h,  97h,  8Fh
-	dw	 87h,   7Fh,  78h,  71h,  6Bh,  65h,  5Fh,  5Ah
-	dw	 55h,   50h,  4Bh,  47h,  43h,  40h,  3Ch,  39h
-	dw	 36h,   33h,  30h,  2Dh,  2Bh,  28h,  26h,  24h
-	dw	 22h,   20h,  1Fh,  1Dh,  1Bh,  1Ah,  18h,  17h
-	dw	 16h,   15h,  13h,  12h,  11h,    0
+	dw	356h, 326h, 2F9h, 2CEh, 2A5h, 280h, 25Ch, 23Ah, 21Ah, 1FBh, 1DFh, 1C4h
+	dw	1ABh, 193h, 17Dh, 167h, 153h, 140h, 12Eh, 11Dh, 10Dh, 0FEh, 0EFh, 0E2h
+	dw	0D6h, 0C9h, 0BEh, 0B4h, 0A9h, 0A0h,  97h,  8Fh,  87h,  7Fh,  78h,  71h
+	dw	 6Bh,  65h,  5Fh,  5Ah,  55h,  50h,  4Bh,  47h,  43h,  40h,  3Ch,  39h
+	dw	 36h,  33h,  30h,  2Dh,  2Bh,  28h,  26h,  24h,  22h,  20h,  1Fh,  1Dh
+	dw	 1Bh,  1Ah,  18h,  17h,  16h,  15h,  13h,  12h,  11h,    0
 ; ---------------------------------------------------------------------------
 
 ;zloc_3E5
@@ -1267,10 +1284,15 @@ zPSGNoteOff:
 
 ; ---------------------------------------------------------------------------
 ; lookup table of FM note frequencies for instruments and sound effects
+    if OptimiseDriver
+	ensure1byteoffset 18h
+    else
 	ensure1byteoffset 0C0h
+    endif
 ; zbyte_534:
 zFrequencies:
 	dw 025Eh,0284h,02ABh,02D3h,02FEh,032Dh,035Ch,038Fh,03C5h,03FFh,043Ch,047Ch
+    if OptimiseDriver=0	; We will calculate these, instead, which will save space
 	dw 0A5Eh,0A84h,0AABh,0AD3h,0AFEh,0B2Dh,0B5Ch,0B8Fh,0BC5h,0BFFh,0C3Ch,0C7Ch
 	dw 125Eh,1284h,12ABh,12D3h,12FEh,132Dh,135Ch,138Fh,13C5h,13FFh,143Ch,147Ch
 	dw 1A5Eh,1A84h,1AABh,1AD3h,1AFEh,1B2Dh,1B5Ch,1B8Fh,1BC5h,1BFFh,1C3Ch,1C7Ch
@@ -1278,7 +1300,7 @@ zFrequencies:
 	dw 2A5Eh,2A84h,2AABh,2AD3h,2AFEh,2B2Dh,2B5Ch,2B8Fh,2BC5h,2BFFh,2C3Ch,2C7Ch
 	dw 325Eh,3284h,32ABh,32D3h,32FEh,332Dh,335Ch,338Fh,33C5h,33FFh,343Ch,347Ch
 	dw 3A5Eh,3A84h,3AABh,3AD3h,3AFEh,3B2Dh,3B5Ch,3B8Fh,3BC5h,3BFFh,3C3Ch,3C7Ch ; 96 entries
-
+    endif
 
 ;zloc_5F4
 zPSGSilenceAll:
@@ -1841,9 +1863,20 @@ zloc_8FB:
 	ld	ix,zSongFM1	; 'ix' points to first FM music track
 	ld	b,(zSongPSG1-zSongFM1)/zTrack.len							; For all 6 of those...
 
+    if FixDriverBugs
+	; zFMNoteOff isn't enough to silence the entire channel:
+	; For added measure, we set Total Level and Release Rate, too.
+-	push	bc
+	bit	2,(ix+0)		; Is bit 2 (SFX overriding) set?
+	call	z,zFMSilenceChannel	; If not, branch
+	add	ix,de						; Next track
+	pop	bc
+	djnz	-
+    else
 -	call	zFMNoteOff				; Send Key Off
 	add	ix,de						; Next track
 	djnz	-
+    endif
 
 	ld	b,(zTracksEnd-zSongPSG1)/zTrack.len								; For all 3 PSG tracks...
 
@@ -1852,6 +1885,32 @@ zloc_8FB:
 	djnz	-
 
 	ret
+
+    if FixDriverBugs
+zFMSilenceChannel:
+	call	zSetMaxRelRate
+	ld	a,(ix+1)		; Get voice control byte
+	and	3			; Channels only!
+	add	a,40h			; Set total level...
+	ld	c,7Fh			; ... to minimum envelope amplitude...
+	call	zFMOperatorWriteLoop	; ... for all operators of this track's channel
+	jp	zFMNoteOff
+
+zSetMaxRelRate:
+	ld	a,(ix+1)		; Get voice control byte
+	and	3			; Channels only!
+	add	a,80h			; Add register 80, set D1L to minimum and RR to maximum...
+	ld	c,0FFh			; ... for all operators on this track's channel
+
+zFMOperatorWriteLoop:
+	ld	b,4			; Loop 4 times
+
+.loop:
+	rst	zWriteFMIorII		; Write to part I or II, as appropriate
+	add	a,4			; a += 4
+	djnz	.loop			; Loop
+	ret
+    endif
 
 ; ---------------------------------------------------------------------------
 ; FM channel assignment bits
