@@ -24,6 +24,7 @@ id function ptr,((ptr-offset)/ptrsize+idstart)
 
 FixDriverBugs = 1
 OptimiseDriver = 1
+RemoveTLPointer = 1
 
 ; ---------------------------------------------------------------------------
 ; NOTES:
@@ -154,8 +155,10 @@ zTrack STRUCT DOTS
 	PSGNoise:		ds.b 1	; PSG noise setting
 	VoicePtrLow:		ds.b 1	; low byte of custom voice table (for SFX)
 	VoicePtrHigh:		ds.b 1	; high byte of custom voice table (for SFX)
+    if RemoveTLPointer=0
 	TLPtrLow:		ds.b 1	; low byte of where TL bytes of current voice begin (set during voice setting)
 	TLPtrHigh:		ds.b 1	; high byte of where TL bytes of current voice begin (set during voice setting)
+    endif
 	LoopCounters:		ds.b $A	; Loop counter index 0
 	;   ... open ...
 	GoSubStack:			; start of next track, every two bytes below this is a coord flag "gosub" (F8h) return stack
@@ -204,7 +207,8 @@ zPSG =		$7F11
 zROMWindow =	$8000
 ; more equates: addresses specific to this program (besides labelled addresses)
 zMusicData =	$1380 ; don't change this unless you change all the pointers in the BINCLUDE'd music too...
-zComRange =	zMusicData+$800 ; 1B80h ; most communication between Z80 and 68k happens in here, among other things (like stack storage)
+;zComRange =	zMusicData+$800 ; 1B80h ; most communication between Z80 and 68k happens in here, among other things (like stack storage)
+zComRange =	$2000-((zVar.len*2)+(zTrack.len*($A+6+$A))) ; 1B80h ; most communication between Z80 and 68k happens in here, among other things (like stack storage)
 
 	phase zComRange
 zAbsVar:		zVar
@@ -2974,6 +2978,9 @@ zSetVoice:
 	; 'hl' is set to the address of the voice table pointer (can be substituted, probably mainly for SFX)
 
     if OptimiseDriver
+      if RemoveTLPointer
+	call	zGetVoiceByIndex
+      else
 	ld	e,a
 	ld	d,0
 	
@@ -2981,6 +2988,7 @@ zSetVoice:
 
 -	add	hl,de
 	djnz	-
+      endif
     else
 	push	hl				; push 'hl' for the end of the following block...
 	
@@ -3039,8 +3047,10 @@ zSetVoice:
 	add	a,24h				; Sets to reg B4h+ (stereo output control and LFO sensitivity)
 	ld	c,(ix+zTrack.AMSFMSPan)			; Panning / AMS / FMS settings from track
 	rst	zWriteFMIorII		; Write it!
+    if RemoveTLPointer=0
 	ld	(ix+zTrack.TLPtrLow),l			; Save current position (TL bytes begin) 
 	ld	(ix+zTrack.TLPtrHigh),h			;	... for updating volume correctly later later
+    endif
 
 zloc_E65:
 	ld	a,0 ; "self-modified code" -- 'a' will actually be set to the feedback/algorithm byte
@@ -3079,6 +3089,22 @@ zSetFMTLs:
 	ret
 ; End of function zSetVoiceMusic
 
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+    if RemoveTLPointer
+zGetVoiceByIndex:
+	or	a	; is voice index 0?
+	ret	z	; if so, hl is already pointing at right voice
+	ld	b,a	; turn voice index into loop counter
+
+	ld	de,25	; size of voice
+
+-	add	hl,de	; advance by one voice
+	djnz	-	; loop
+
+	ret
+; End of function zGetVoiceByIndex
+    endif
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -3089,6 +3115,34 @@ zSetChanVol:
 	ret	nz				; If so, quit!
 	bit	2,(ix+zTrack.PlaybackControl)		; If playback control byte "SFX is overriding this track" bit set...
 	ret	nz				; ... then quit!
+    if RemoveTLPointer
+	ld	c,(ix+zTrack.Volume)		; Get channel volume
+	bit	7,c				; If bit 7 (80h) is set...
+	ret	nz				; ... then quit!
+	push	hl			; Save 'hl'
+
+	; Get voice pointer
+	ld	hl,(zAbsVar.VoiceTblPtr)
+	ld	a,(zDoSFXFlag)
+	or	a
+	jr	z,+
+	ld	l,(ix+zTrack.VoicePtrLow)			; get low byte of custom voice table
+	ld	h,(ix+zTrack.VoicePtrHigh)			; get high byte of custom voice table
++
+	; Get voice
+	ld	a,(ix+zTrack.VoiceIndex)
+	call	zGetVoiceByIndex
+
+	; Get voice TL
+	ld	de,21
+	add	hl,de
+
+	ld	a,(ix+zTrack.VoiceControl)		; Load current voice control byte
+	and	3				; Keep only bits 0-2
+	add	a,40h			; Add 40h -- appropriate TL register
+	ld	d,c			; Get channel volume
+	ld	e,(ix+zTrack.VolTLMask)		; zVolTLMaskTbl value from last voice setting (marks which specific TL operators need updating)
+    else
 	ld	e,(ix+zTrack.VolTLMask)		; zVolTLMaskTbl value from last voice setting (marks which specific TL operators need updating)
 	ld	a,(ix+zTrack.VoiceControl)		; Load current voice control byte
 	and	3				; Keep only bits 0-2
@@ -3099,6 +3153,7 @@ zSetChanVol:
 	push	hl			; Save 'hl'
 	ld	l,(ix+zTrack.TLPtrLow)		; low byte of where TL bytes begin (set during last voice setting)
 	ld	h,(ix+zTrack.TLPtrHigh)		; high byte of where TL bytes begin (set during last voice setting)
+    endif
 	call	zSetFMTLs	; Set the appropriate Total Levels
 	pop	hl				; Restore 'hl'
 	ret
