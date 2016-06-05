@@ -52,16 +52,9 @@ offsetBankTableEntry macro ptr
 DACBINCLUDE macro file,{INTLABEL}
 __LABEL__ label *
 	BINCLUDE file
-__LABEL___Len  := little_endian(*-__LABEL__)
-__LABEL___Ptr  := k68z80Pointer(__LABEL__-soundBankStart)
+__LABEL___Len  := (*-__LABEL__)
+__LABEL___Ptr  := ((__LABEL__-soundBankStart)&$7FFF)+$8000
 __LABEL___Bank := soundBankStart
-    endm
-
-; Setup macro for DAC samples.
-DAC_Setup macro rate,dacptr
-	dc.b	rate
-	dc.w	dacptr_Len
-	dc.w	dacptr_Ptr
     endm
 
 ; A "null" DAC sample.
@@ -69,12 +62,6 @@ DAC_Invalid:
 DAC_Invalid_Len := 0
 DAC_Invalid_Ptr := 0
 DAC_Invalid_Bank := 0
-
-; Setup a null entry for a DAC sample.
-DAC_Null_Setup macro rate,dacptr
-	dc.b	rate
-	dc.w 	$0000,$0000
-    endm
 
 ; ===========================================================================
 ; Music Banks
@@ -150,102 +137,9 @@ Snd_Credits:		include 	"sound/Music/Credits.asm"
 ; ===========================================================================
 ; DAC Banks
 ; ===========================================================================
-
-DAC_Offsets macro
-		DAC_Setup $04,DAC_81_Data
-		DAC_Setup $0E,DAC_82_83_84_85_Data
-		DAC_Setup $14,DAC_82_83_84_85_Data
-		DAC_Setup $1A,DAC_82_83_84_85_Data
-		DAC_Setup $20,DAC_82_83_84_85_Data
-		DAC_Setup $04,DAC_86_Data
-		DAC_Setup $04,DAC_87_Data
-		DAC_Setup $06,DAC_88_Data
-		DAC_Setup $0A,DAC_89_Data
-		DAC_Setup $14,DAC_8A_8B_Data
-		DAC_Setup $1B,DAC_8A_8B_Data
-		DAC_Setup $08,DAC_8C_Data
-		DAC_Setup $0B,DAC_8D_8E_Data
-		DAC_Setup $11,DAC_8D_8E_Data
-		DAC_Setup $08,DAC_8F_Data
-		DAC_Setup $03,DAC_90_91_92_93_Data
-		DAC_Setup $07,DAC_90_91_92_93_Data
-		DAC_Setup $0A,DAC_90_91_92_93_Data
-		DAC_Setup $0E,DAC_90_91_92_93_Data
-		DAC_Setup $06,DAC_94_95_96_97_Data
-		DAC_Setup $0A,DAC_94_95_96_97_Data
-		DAC_Setup $0D,DAC_94_95_96_97_Data
-		DAC_Setup $12,DAC_94_95_96_97_Data
-		DAC_Setup $0B,DAC_98_99_9A_Data
-		DAC_Setup $13,DAC_98_99_9A_Data
-		DAC_Setup $16,DAC_98_99_9A_Data
-		DAC_Setup $0C,DAC_9B_Data
-		DAC_Setup $0A,DAC_9C_Data
-		DAC_Setup $18,DAC_9D_Data
-		DAC_Setup $18,DAC_9E_Data
-		DAC_Setup $0C,DAC_9F_Data
-		DAC_Setup $0C,DAC_A0_Data
-		DAC_Setup $0A,DAC_A1_Data
-		DAC_Setup $0A,DAC_A2_Data
-		DAC_Setup $18,DAC_A3_Data
-		DAC_Setup $18,DAC_A4_Data
-		DAC_Setup $0C,DAC_A5_Data
-		DAC_Setup $09,DAC_A6_Data
-		DAC_Setup $18,DAC_A7_Data
-		DAC_Setup $18,DAC_A8_Data
-		DAC_Setup $0C,DAC_A9_Data
-		DAC_Setup $0A,DAC_AA_Data
-		DAC_Setup $0D,DAC_AB_Data
-		DAC_Setup $06,DAC_AC_Data
-		DAC_Setup $10,DAC_AD_AE_Data
-		DAC_Setup $18,DAC_AD_AE_Data
-		DAC_Setup $09,DAC_AF_B0_Data
-		DAC_Setup $12,DAC_AF_B0_Data
-		DAC_Setup $18,DAC_B1_Data
-		DAC_Setup $16,DAC_B2_B3_Data
-		DAC_Setup $20,DAC_B2_B3_Data
-		DAC_Setup $0C,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $0C,DAC_B5_Data
-		DAC_Setup $0C,DAC_B6_Data
-		DAC_Setup $18,DAC_B7_Data
-		DAC_Setup $0C,DAC_B8_B9_Data
-		DAC_Setup $0C,DAC_B8_B9_Data
-		DAC_Setup $18,DAC_BA_Data
-		DAC_Setup $18,DAC_BB_Data
-		DAC_Setup $18,DAC_BC_Data
-		DAC_Setup $0C,DAC_BD_Data
-		DAC_Setup $0C,DAC_BE_Data
-		DAC_Setup $1C,DAC_BF_Data
-		DAC_Setup $0B,DAC_C0_Data
-		DAC_Setup $0F,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $11,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $12,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $0B,DAC_B4_C1_C2_C3_C4_Data
-
-		DAC_Setup $17,SndDAC_Sample1
-		DAC_Setup $01,SndDAC_Sample2
-		DAC_Setup $06,SndDAC_Sample3
-		DAC_Setup $07,SndDAC_Sample4
-		DAC_Setup $1B,SndDAC_Sample5
-		DAC_Setup $0A,SndDAC_Sample6
-		DAC_Setup $1B,SndDAC_Sample7
-		DAC_Setup $12,SndDAC_Sample5
-		DAC_Setup $15,SndDAC_Sample5
-		DAC_Setup $1C,SndDAC_Sample5
-		DAC_Setup $1D,SndDAC_Sample5
-		DAC_Setup $02,SndDAC_Sample6
-		DAC_Setup $05,SndDAC_Sample6
-		DAC_Setup $08,SndDAC_Sample6
-		DAC_Setup $08,SndDAC_Sample7
-		DAC_Setup $0B,SndDAC_Sample7
-		DAC_Setup $12,SndDAC_Sample7
-	endm
-
-; ---------------------------------------------------------------------------
 ; DAC Bank 1
 ; ---------------------------------------------------------------------------
 DacBank1:			startBank
-	DAC_Offsets
-
 DAC_81_Data:			DACBINCLUDE "sound/DAC/81.bin"
 DAC_82_83_84_85_Data:		DACBINCLUDE "sound/DAC/82-85.bin"
 DAC_86_Data:			DACBINCLUDE "sound/DAC/86.bin"
@@ -271,8 +165,6 @@ DAC_9F_Data:			DACBINCLUDE "sound/DAC/9F.bin"
 ; Dac Bank 2
 ; ---------------------------------------------------------------------------
 DacBank2:	startBank
-	DAC_Offsets
-
 DAC_A0_Data:			DACBINCLUDE "sound/DAC/A0.bin"
 DAC_A1_Data:			DACBINCLUDE "sound/DAC/A1.bin"
 DAC_A2_Data:			DACBINCLUDE "sound/DAC/A2.bin"
@@ -296,8 +188,6 @@ DAC_B1_Data:			DACBINCLUDE "sound/DAC/B1.bin"
 ; Dac Bank 3
 ; ---------------------------------------------------------------------------
 DacBank3:	startBank
-	DAC_Offsets
-
 DAC_B2_B3_Data:			DACBINCLUDE "sound/DAC/B2-B3.bin"
 DAC_B4_C1_C2_C3_C4_Data:	DACBINCLUDE "sound/DAC/B4C1-C4.bin"
 DAC_B5_Data:			DACBINCLUDE "sound/DAC/B5.bin"
@@ -750,7 +640,12 @@ zVInt:	rsttarget
 		and	7Fh								; Strip 'DAC playing' bit
 		ld	c, a							; c = a
 		ld	b, 0							; Sign extend c to bc
-		ld	hl, DAC_Banks					; Make hl point to DAC bank table
+		ld	hl, DAC_Offsets					; Make hl point to DAC bank table
+		add	hl, bc							; Offset into entry for current sample
+		add	hl, bc							; Offset into entry for current sample
+		add	hl, bc							; Offset into entry for current sample
+		add	hl, bc							; Offset into entry for current sample
+		add	hl, bc							; Offset into entry for current sample
 		add	hl, bc							; Offset into entry for current sample
 		ld	a, (hl)							; Get bank index
 		bankswitch1							; Switch to current DAC sample's bank
@@ -843,39 +738,6 @@ zWriteFMII:
 		ld	(zYM2612_D1), a					; Send data to register
 		ret
 ; End of function zWriteFMII
-
-; ---------------------------------------------------------------------------
-; ===========================================================================
-; DAC BANKS
-; ===========================================================================
-; Note: this table has a dummy first entry for the case when there is no DAC
-; sample being played -- the code still results in a valid bank switch, and
-; does not need to worry about special cases.
-DAC_Banks:
-		db		zmake68kBank(DacBank1)               ,zmake68kBank(DAC_81_Data)            ,zmake68kBank(DAC_82_83_84_85_Data)   ,zmake68kBank(DAC_82_83_84_85_Data)
-		db		zmake68kBank(DAC_82_83_84_85_Data)   ,zmake68kBank(DAC_82_83_84_85_Data)   ,zmake68kBank(DAC_86_Data)            ,zmake68kBank(DAC_87_Data)
-		db		zmake68kBank(DAC_88_Data)            ,zmake68kBank(DAC_89_Data)            ,zmake68kBank(DAC_8A_8B_Data)         ,zmake68kBank(DAC_8A_8B_Data)
-		db		zmake68kBank(DAC_8C_Data)            ,zmake68kBank(DAC_8D_8E_Data)         ,zmake68kBank(DAC_8D_8E_Data)         ,zmake68kBank(DAC_8F_Data)
-		db		zmake68kBank(DAC_90_91_92_93_Data)   ,zmake68kBank(DAC_90_91_92_93_Data)   ,zmake68kBank(DAC_90_91_92_93_Data)   ,zmake68kBank(DAC_90_91_92_93_Data)
-		db		zmake68kBank(DAC_94_95_96_97_Data)   ,zmake68kBank(DAC_94_95_96_97_Data)   ,zmake68kBank(DAC_94_95_96_97_Data)   ,zmake68kBank(DAC_94_95_96_97_Data)
-		db		zmake68kBank(DAC_98_99_9A_Data)      ,zmake68kBank(DAC_98_99_9A_Data)      ,zmake68kBank(DAC_98_99_9A_Data)      ,zmake68kBank(DAC_9B_Data)
-		db		zmake68kBank(DAC_9C_Data)            ,zmake68kBank(DAC_9D_Data)            ,zmake68kBank(DAC_9E_Data)            ,zmake68kBank(DAC_9F_Data)
-		db		zmake68kBank(DAC_A0_Data)            ,zmake68kBank(DAC_A1_Data)            ,zmake68kBank(DAC_A2_Data)            ,zmake68kBank(DAC_A3_Data)
-		db		zmake68kBank(DAC_A4_Data)            ,zmake68kBank(DAC_A5_Data)            ,zmake68kBank(DAC_A6_Data)            ,zmake68kBank(DAC_A7_Data)
-		db		zmake68kBank(DAC_A8_Data)            ,zmake68kBank(DAC_A9_Data)            ,zmake68kBank(DAC_AA_Data)            ,zmake68kBank(DAC_AB_Data)
-		db		zmake68kBank(DAC_AC_Data)            ,zmake68kBank(DAC_AD_AE_Data)         ,zmake68kBank(DAC_AD_AE_Data)         ,zmake68kBank(DAC_AF_B0_Data)
-		db		zmake68kBank(DAC_AF_B0_Data)         ,zmake68kBank(DAC_B1_Data)            ,zmake68kBank(DAC_B2_B3_Data)         ,zmake68kBank(DAC_B2_B3_Data)
-		db		zmake68kBank(DAC_B4_C1_C2_C3_C4_Data),zmake68kBank(DAC_B5_Data)            ,zmake68kBank(DAC_B6_Data)            ,zmake68kBank(DAC_B7_Data)
-		db		zmake68kBank(DAC_B8_B9_Data)         ,zmake68kBank(DAC_B8_B9_Data)         ,zmake68kBank(DAC_BA_Data)            ,zmake68kBank(DAC_BB_Data)
-		db		zmake68kBank(DAC_BC_Data)            ,zmake68kBank(DAC_BD_Data)            ,zmake68kBank(DAC_BE_Data)            ,zmake68kBank(DAC_BF_Data)
-		db		zmake68kBank(DAC_C0_Data)            ,zmake68kBank(DAC_B4_C1_C2_C3_C4_Data),zmake68kBank(DAC_B4_C1_C2_C3_C4_Data),zmake68kBank(DAC_B4_C1_C2_C3_C4_Data)
-		db		zmake68kBank(DAC_B4_C1_C2_C3_C4_Data)
-
-		db		zmake68kBank(SndDAC_Sample1)         ,zmake68kBank(SndDAC_Sample2)         ,zmake68kBank(SndDAC_Sample3)         ,zmake68kBank(SndDAC_Sample4)
-		db		zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample6)         ,zmake68kBank(SndDAC_Sample7)         ,zmake68kBank(SndDAC_Sample5)
-		db		zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample6)
-		db		zmake68kBank(SndDAC_Sample6)         ,zmake68kBank(SndDAC_Sample6)         ,zmake68kBank(SndDAC_Sample7)         ,zmake68kBank(SndDAC_Sample7)
-		db		zmake68kBank(SndDAC_Sample7)
 
 ; =============== S U B	R O U T	I N E =======================================
 ;
@@ -4399,12 +4261,13 @@ zPlayDigitalAudio:
 		ei									; Re-enable interrupts
 		ld	iy, DecTable					; iy = pointer to jman2050 decode lookup table
 		ld	hl, zDACIndex					; hl = pointer to DAC index/flag
+		dec	(hl)								; a -= 1
 		ld	a, (hl)							; a = DAC index
-		dec	a								; a -= 1
 		set	7, (hl)							; Set bit 7 to indicate that DAC sample is being played
-		ld	hl, zROMWindow					; hl = pointer to ROM window
+		ld	hl, DAC_Offsets+1					; hl = pointer to ROM window
 		ld	c,a
 		ld	b,0
+		add	hl,bc
 		add	hl,bc
 		add	hl,bc
 		add	hl,bc
@@ -4705,6 +4568,102 @@ byte_11E5:
 	db	0Eh,0Dh,0Ch,0Bh,0Ah,9,8,7,6,5,4,3,2,1,0,81h
 
 ; ---------------------------------------------------------------------------
+; Setup macro for DAC samples.
+DAC_Setup macro rate,dacptr
+	db	zmake68kBank(dacptr)
+	db	rate
+	dw	dacptr_Len
+	dw	dacptr_Ptr
+    endm
+
+DAC_Offsets:
+		DAC_Setup 04h,DAC_81_Data
+		DAC_Setup 0Eh,DAC_82_83_84_85_Data
+		DAC_Setup 14h,DAC_82_83_84_85_Data
+		DAC_Setup 1Ah,DAC_82_83_84_85_Data
+		DAC_Setup 20h,DAC_82_83_84_85_Data
+		DAC_Setup 04h,DAC_86_Data
+		DAC_Setup 04h,DAC_87_Data
+		DAC_Setup 06h,DAC_88_Data
+		DAC_Setup 0Ah,DAC_89_Data
+		DAC_Setup 14h,DAC_8A_8B_Data
+		DAC_Setup 1Bh,DAC_8A_8B_Data
+		DAC_Setup 08h,DAC_8C_Data
+		DAC_Setup 0Bh,DAC_8D_8E_Data
+		DAC_Setup 11h,DAC_8D_8E_Data
+		DAC_Setup 08h,DAC_8F_Data
+		DAC_Setup 03h,DAC_90_91_92_93_Data
+		DAC_Setup 07h,DAC_90_91_92_93_Data
+		DAC_Setup 0Ah,DAC_90_91_92_93_Data
+		DAC_Setup 0Eh,DAC_90_91_92_93_Data
+		DAC_Setup 06h,DAC_94_95_96_97_Data
+		DAC_Setup 0Ah,DAC_94_95_96_97_Data
+		DAC_Setup 0Dh,DAC_94_95_96_97_Data
+		DAC_Setup 12h,DAC_94_95_96_97_Data
+		DAC_Setup 0Bh,DAC_98_99_9A_Data
+		DAC_Setup 13h,DAC_98_99_9A_Data
+		DAC_Setup 16h,DAC_98_99_9A_Data
+		DAC_Setup 0Ch,DAC_9B_Data
+		DAC_Setup 0Ah,DAC_9C_Data
+		DAC_Setup 18h,DAC_9D_Data
+		DAC_Setup 18h,DAC_9E_Data
+		DAC_Setup 0Ch,DAC_9F_Data
+		DAC_Setup 0Ch,DAC_A0_Data
+		DAC_Setup 0Ah,DAC_A1_Data
+		DAC_Setup 0Ah,DAC_A2_Data
+		DAC_Setup 18h,DAC_A3_Data
+		DAC_Setup 18h,DAC_A4_Data
+		DAC_Setup 0Ch,DAC_A5_Data
+		DAC_Setup 09h,DAC_A6_Data
+		DAC_Setup 18h,DAC_A7_Data
+		DAC_Setup 18h,DAC_A8_Data
+		DAC_Setup 0Ch,DAC_A9_Data
+		DAC_Setup 0Ah,DAC_AA_Data
+		DAC_Setup 0Dh,DAC_AB_Data
+		DAC_Setup 06h,DAC_AC_Data
+		DAC_Setup 10h,DAC_AD_AE_Data
+		DAC_Setup 18h,DAC_AD_AE_Data
+		DAC_Setup 09h,DAC_AF_B0_Data
+		DAC_Setup 12h,DAC_AF_B0_Data
+		DAC_Setup 18h,DAC_B1_Data
+		DAC_Setup 16h,DAC_B2_B3_Data
+		DAC_Setup 20h,DAC_B2_B3_Data
+		DAC_Setup 0Ch,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup 0Ch,DAC_B5_Data
+		DAC_Setup 0Ch,DAC_B6_Data
+		DAC_Setup 18h,DAC_B7_Data
+		DAC_Setup 0Ch,DAC_B8_B9_Data
+		DAC_Setup 0Ch,DAC_B8_B9_Data
+		DAC_Setup 18h,DAC_BA_Data
+		DAC_Setup 18h,DAC_BB_Data
+		DAC_Setup 18h,DAC_BC_Data
+		DAC_Setup 0Ch,DAC_BD_Data
+		DAC_Setup 0Ch,DAC_BE_Data
+		DAC_Setup 1Ch,DAC_BF_Data
+		DAC_Setup 0Bh,DAC_C0_Data
+		DAC_Setup 0Fh,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup 11h,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup 12h,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup 0Bh,DAC_B4_C1_C2_C3_C4_Data
+
+		DAC_Setup 17h,SndDAC_Sample1
+		DAC_Setup 01h,SndDAC_Sample2
+		DAC_Setup 06h,SndDAC_Sample3
+		DAC_Setup 07h,SndDAC_Sample4
+		DAC_Setup 1Bh,SndDAC_Sample5
+		DAC_Setup 0Ah,SndDAC_Sample6
+		DAC_Setup 1Bh,SndDAC_Sample7
+		DAC_Setup 12h,SndDAC_Sample5
+		DAC_Setup 15h,SndDAC_Sample5
+		DAC_Setup 1Ch,SndDAC_Sample5
+		DAC_Setup 1Dh,SndDAC_Sample5
+		DAC_Setup 02h,SndDAC_Sample6
+		DAC_Setup 05h,SndDAC_Sample6
+		DAC_Setup 08h,SndDAC_Sample6
+		DAC_Setup 08h,SndDAC_Sample7
+		DAC_Setup 0Bh,SndDAC_Sample7
+		DAC_Setup 12h,SndDAC_Sample7
+
 ; ===========================================================================
 ; Music Pointers
 ; ===========================================================================
