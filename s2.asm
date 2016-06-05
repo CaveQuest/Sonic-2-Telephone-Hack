@@ -400,6 +400,7 @@ Two_player_mode =		ramaddr( $FFFFFFD8 ) ; flag (0 for main game)
 Music_to_play =			ramaddr( $FFFFFFE0 )
 SFX_to_play =			ramaddr( $FFFFFFE1 ) ; normal
 SFX_to_play_2 =			ramaddr( $FFFFFFE2 ) ; alternating stereo
+SFX_to_play_3 =			ramaddr( $FFFFFFE3 ) ; normal
 Music_to_play_2 =		ramaddr( $FFFFFFE4 ) ; alternate (higher priority?) slot
 
 Demo_mode_flag =		ramaddr( $FFFFFFF0 ) ; 1 if a demo is playing (2 bytes)
@@ -1715,12 +1716,22 @@ PlayMusic:
 
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
+; play a sound if the source is onscreen
+; sub_137C:
+PlaySoundLocal:
+	tst.b	render_flags(a0)
+	bpl.s	+
 ; sub_1370
 PlaySound:
+	tst.b	(SFX_to_play).w
+	bne.s	++
 	move.b	d0,(SFX_to_play).w
++
 	rts
-; End of function PlaySound
++
+	move.b	d0,(SFX_to_play_3).w
+	rts
+; End of function PlaySoundLocal
 
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
@@ -1731,17 +1742,6 @@ PlaySoundStereo:
 	rts
 ; End of function PlaySoundStereo
 
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-; play a sound if the source is onscreen
-; sub_137C:
-PlaySoundLocal:
-	tst.b	render_flags(a0)
-	bpl.s	+
-	move.b	d0,(SFX_to_play).w
-+
-	rts
-; End of function PlaySoundLocal
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to pause the game
