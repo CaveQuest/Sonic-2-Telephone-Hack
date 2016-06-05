@@ -507,8 +507,8 @@ StartOfRom:
 Header:
 	dc.b "SEGA GENESIS    " ; Console name
 	dc.b "(C)SEGA 1992.SEP" ; Copyright/Date
-	dc.b "SONIC THE             HEDGEHOG 2                " ; Domestic name
-	dc.b "SONIC THE             HEDGEHOG 2                " ; International name
+	dc.b "SONIC AND THE TELEPHONE 2                       " ; Domestic name
+	dc.b "SONIC AND THE TELEPHONE 2                       " ; International name
 	dc.b "GM 00001051-01"   ; Version
 ; word_18E
 Checksum:
