@@ -33,7 +33,7 @@ soundBankStart := __LABEL__
 soundBankName := "__LABEL__"
     endm
 
-DebugSoundbanks := 0
+DebugSoundbanks := 1
 
 finishBank macro
 	if * > soundBankStart + $8000
@@ -866,7 +866,7 @@ MusID_Emerald			= 9Dh
 MusID__End				= 0A0h
 SndID__First			= MusID__End
 SndID_Ring				= SndID__First+15h
-SndID_Spindash			= 0FFh;0E0h
+SndID_Spindash			= 0E0h
 SndID__FirstContinuous	= 0FFh
 MusID_SKCredits			= 0FFh
 SndID__End				= 0F0h
@@ -1229,12 +1229,12 @@ zUpdateMusic:
 		call	zDoMusicFadeOut				; Check if music should be faded out and fade if needed
 		call	zDoMusicFadeIn				; Check if music should be faded in and fade if needed
 		ld	a, (zFadeToPrevFlag)			; Get fade-to-prev flag
-		cp	MusID_1UP-1						; Is it still 1-Up?
+		cp	MusID_1UP-MusID__First						; Is it still 1-Up?
 		jr	nz, .check_fade_in				; Branch if not
 		ld	a, (zMusicNumber)				; Get next music to play
 		cp	MusID_1UP						; Is it another 1-Up?
 		jr	z, .clr_queue					; Branch if yes
-		cp	MusID__End-1					; Is it music (except credits song)?
+		cp	MusID__End-MusID__First					; Is it music (except credits song)?
 		jr	c, .clr_sfx						; Branch if not
 
 .clr_queue:
