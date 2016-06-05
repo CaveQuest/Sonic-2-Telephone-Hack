@@ -1879,11 +1879,11 @@ zPlaySoundByIndex:
 ; ---------------------------------------------------------------------------
 ;loc_524
 zFadeEffects:
-		dw	zStopSFX						; E4h
-		dw	zFadeOutMusic					; E1h
-		dw	0						; E2h
-		dw	0					; E3h
-		dw	0					; E5h
+		dw	zStopSFX
+		dw	zFadeOutMusic
+		dw	0			; Sega sound
+		dw	0			; Speed up
+		dw	0			; Slow down
 		dw	zStopSoundAndMusic
 ; ---------------------------------------------------------------------------
 ;sub_52E
