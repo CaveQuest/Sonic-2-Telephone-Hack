@@ -3120,6 +3120,7 @@ zExtraCoordFlagSwitchTable:
 		dw cfSetSSGEG						; 0FFh 05h
 		dw cfFMVolEnv						; 0FFh 06h
 		dw cfResetSpindashRev				; 0FFh 07h
+		dw cfNoteFillSet				; 0FFh 08h	
 ; =============== S U B	R O U T	I N E =======================================
 ; Sets a new DAC sample for play.
 ;
@@ -3346,6 +3347,7 @@ cfPreventAttack:
 ;loc_CE1
 cfNoteFill:
 		call	zComputeNoteDuration		; Multiply note fill by tempo divider
+cfNoteFillSet:
 		ld	(ix+zTrack.NoteFillTimeout), a	; Store result into note fill timeout
 		ld	(ix+zTrack.NoteFillMaster), a	; Store master copy of note fill
 		ret
