@@ -18,7 +18,7 @@
 
       # of sprite sets:     4
 
- # of Sprites in set 0:     4
+ # of Sprites in set 0:     5
  ;"INVISIBLE" SET
 
          ;RING
@@ -48,6 +48,13 @@
           yoff in file:     0
                  Width:    16
                 Height:    14
+
+         ;START POSITION
+         Sprite 4 file:     1
+          xoff in file:    64
+          yoff in file:   145
+                 Width:    29
+                Height:    39
 
  # of Sprites in set 1:    26
  ;"GLOBAL" SET
@@ -279,7 +286,7 @@
                  Width:    16
                 Height:    16
 
- # of Sprites in set 3:     4
+ # of Sprites in set 3:     1
  ;AQUATIC RUIN SET
 
          ;MOVING/FALLING PLATFORM
@@ -288,27 +295,6 @@
           yoff in file:     0
                  Width:    64
                 Height:    45
-
-         ;ARROW SHOOTER
-         Sprite 1 file:    20
-          xoff in file:     0
-          yoff in file:    46
-                 Width:    32
-                Height:    16
-
-         ;GROUNDER
-         Sprite 2 file:    20
-          xoff in file:    64
-          yoff in file:     0
-                 Width:    32
-                Height:    40
-
-         ;GROUNDER BEHIND WALL
-         Sprite 3 file:    20
-          xoff in file:    96
-          yoff in file:     0
-                 Width:    32
-                Height:    32
 
 ;Object Listing gives identity to each of the objects listed
 ;- Object ID is the ID number of the object in the game (hex value)
@@ -447,8 +433,8 @@ Num Dependants:   0
           Desc: Left\Up    - Below High
           Desc: Left\up    - Above High
        Field 6: 10000000
-          Desc: Unknown
-          Desc: Unknown
+          Desc: Allow freespace switch
+          Desc: Switch only on path
   DefaultParam:   0
    DefaultFlag:   0
     DefaultDir:   0
@@ -1117,7 +1103,7 @@ Num Dependants:   2
      Object ID:   4
     # of Zones:   1
     Zone Entry:  FF
-   Description: Water Surface
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1129,7 +1115,7 @@ Num Dependants:   0
      Object ID:   5
     # of Zones:   1
     Zone Entry:  FF
-   Description: Tails' Tails
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1165,7 +1151,7 @@ Num Dependants:   0
      Object ID:   8
     # of Zones:   1
     Zone Entry:  FF
-   Description: Splash and Dust
+   Description: Invisible Barrier
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1177,7 +1163,7 @@ Num Dependants:   0
      Object ID:   9
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Sonic
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1189,7 +1175,7 @@ Num Dependants:   0
      Object ID:   A
     # of Zones:   1
     Zone Entry:  FF
-   Description: Exhaled Bubbles
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1213,7 +1199,7 @@ Num Dependants:   0
      Object ID:   C
     # of Zones:   1
     Zone Entry:  FF
-   Description: Small Floating Platform
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1264,7 +1250,7 @@ Num Dependants:   0
      Object ID:   F
     # of Zones:   1
     Zone Entry:  FF
-   Description: Title Screen Menu
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1276,7 +1262,7 @@ Num Dependants:   0
      Object ID:  10
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Tails
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1676,7 +1662,7 @@ Num Dependants:   0
      Object ID:  13
     # of Zones:   1
     Zone Entry:  FF
-   Description: Waterfall (HPZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1724,7 +1710,7 @@ Num Dependants:   0
      Object ID:  17
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (animated/hurtable object)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1921,7 +1907,7 @@ Num Dependants:   0
      Object ID:  20
     # of Zones:   1
     Zone Entry:  FF
-   Description: Lava Bubble (HTZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1933,7 +1919,7 @@ Num Dependants:   0
      Object ID:  21
     # of Zones:   1
     Zone Entry:  FF
-   Description: HUD Score Rings Time
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -1952,17 +1938,7 @@ Num Dependants:   0
     DefaultDir:   0
  DefltRemember:   0
 Num Dependants:   0
-     Num Types:   1
- Type 0   XMin: -16
-          YMin:  -8
-          XMax:  16
-          YMax:   8
-  # of Sprites:   1
-   Sprite 0 ID:   1
-           Set:   3
-     Direction:   0
-          xoff: -16
-          yoff:  -8
+     Num Types:   0
 
      Object ID:  23
     # of Zones:   1
@@ -4274,7 +4250,7 @@ Num Dependants:   0
      Object ID:  2F
     # of Zones:   1
     Zone Entry:  FF
-   Description: Smashable Ground (HTZ)
+   Description: Unknown Block
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -4286,7 +4262,7 @@ Num Dependants:   0
      Object ID:  30
     # of Zones:   1
     Zone Entry:  FF
-   Description: Earthquake Lava (HTZ)
+   Description: Unknown, Large\Invisible
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -4346,7 +4322,7 @@ Num Dependants:   0
      Object ID:  35
     # of Zones:   1
     Zone Entry:  FF
-   Description: Invincibility Stars
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -4600,7 +4576,7 @@ Num Dependants:   0
      Object ID:  3B
     # of Zones:   1
     Zone Entry:  FF
-   Description: Solid Block
+   Description: Unknown Block
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -4612,7 +4588,7 @@ Num Dependants:   0
      Object ID:  3C
     # of Zones:   1
     Zone Entry:  FF
-   Description: Breakable Wall
+   Description: Unknown Breakable Wall
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -4874,7 +4850,7 @@ Num Dependants:   2
      Object ID:  42
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spring Piston (MTZ)
+   Description: Spring Piston (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -4958,7 +4934,7 @@ Num Dependants:   0
      Object ID:  49
     # of Zones:   1
     Zone Entry:  FF
-   Description: Waterfall (EHZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5004,7 +4980,7 @@ Num Dependants:   0
      Object ID:  4C
     # of Zones:   1
     Zone Entry:  FF
-   Description: Nothing
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5016,7 +4992,7 @@ Num Dependants:   0
      Object ID:  4D
     # of Zones:   1
     Zone Entry:  FF
-   Description: Nothing
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5028,7 +5004,7 @@ Num Dependants:   0
      Object ID:  4E
     # of Zones:   1
     Zone Entry:  FF
-   Description: Nothing
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5040,7 +5016,7 @@ Num Dependants:   0
      Object ID:  4F
     # of Zones:   1
     Zone Entry:  FF
-   Description: Nothing
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5112,7 +5088,7 @@ Num Dependants:   0
      Object ID:  55
     # of Zones:   1
     Zone Entry:  FF
-   Description: OOZ Boss
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5148,7 +5124,7 @@ Num Dependants:   0
      Object ID:  58
     # of Zones:   1
     Zone Entry:  FF
-   Description: Boss Explosion
+   Description: Unknown Explosion
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5160,7 +5136,7 @@ Num Dependants:   0
      Object ID:  59
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Emerald
+   Description: Unknown Teleportation
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5172,7 +5148,7 @@ Num Dependants:   0
      Object ID:  5A
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Messages
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5184,7 +5160,7 @@ Num Dependants:   0
      Object ID:  5B
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (Special Stage)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5230,7 +5206,7 @@ Num Dependants:   0
      Object ID:  5E
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage HUD
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5242,7 +5218,7 @@ Num Dependants:   0
      Object ID:  5F
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Banner
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5254,7 +5230,7 @@ Num Dependants:   0
      Object ID:  60
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Ring
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5266,7 +5242,7 @@ Num Dependants:   0
      Object ID:  61
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Bombs
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5278,7 +5254,7 @@ Num Dependants:   0
      Object ID:  62
     # of Zones:   1
     Zone Entry:  FF
-   Description: Nothing
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5290,7 +5266,7 @@ Num Dependants:   0
      Object ID:  63
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Shadow
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5302,7 +5278,7 @@ Num Dependants:   0
      Object ID:  64
     # of Zones:   1
     Zone Entry:  FF
-   Description: Smashing Pistons (MTZ)
+   Description: Smashing Pistons (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5314,7 +5290,7 @@ Num Dependants:   0
      Object ID:  65
     # of Zones:   1
     Zone Entry:  FF
-   Description: TrapDoor (MTZ)
+   Description: TrapDoor (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5326,7 +5302,7 @@ Num Dependants:   0
      Object ID:  66
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spring Wall (MTZ)
+   Description: Unknown Bumper (CNZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5338,7 +5314,7 @@ Num Dependants:   0
      Object ID:  67
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spin Tube (MTZ)
+   Description: Spin Tube (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5350,7 +5326,7 @@ Num Dependants:   0
      Object ID:  68
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spear Block (MTZ)
+   Description: Spear Block (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5362,7 +5338,7 @@ Num Dependants:   0
      Object ID:  69
     # of Zones:   1
     Zone Entry:  FF
-   Description: Nut (MTZ)
+   Description: Nut (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5374,7 +5350,7 @@ Num Dependants:   0
      Object ID:  6A
     # of Zones:   1
     Zone Entry:  FF
-   Description: Retracting Platform (MTZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5398,7 +5374,7 @@ Num Dependants:   0
      Object ID:  6C
     # of Zones:   1
     Zone Entry:  FF
-   Description: Small Moving Platform
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5410,7 +5386,7 @@ Num Dependants:   0
      Object ID:  6D
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spear (MTZ)
+   Description: Spear (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5422,7 +5398,7 @@ Num Dependants:   0
      Object ID:  6E
     # of Zones:   1
     Zone Entry:  FF
-   Description: Small Circling Platform
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5446,7 +5422,7 @@ Num Dependants:   0
      Object ID:  70
     # of Zones:   1
     Zone Entry:  FF
-   Description: Giant Rotating Cog (MTZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5458,7 +5434,7 @@ Num Dependants:   0
      Object ID:  71
     # of Zones:   1
     Zone Entry:  FF
-   Description: Bridge (HPZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5482,7 +5458,7 @@ Num Dependants:   0
      Object ID:  73
     # of Zones:   1
     Zone Entry:  FF
-   Description: Rotating Ring Thing (MCZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5506,7 +5482,7 @@ Num Dependants:   0
      Object ID:  75
     # of Zones:   1
     Zone Entry:  FF
-   Description: Brick (MCZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5530,7 +5506,7 @@ Num Dependants:   0
      Object ID:  77
     # of Zones:   1
     Zone Entry:  FF
-   Description: Bridge (MCZ)
+   Description: Unknown Long Block
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5588,7 +5564,7 @@ Num Dependants:   0
      Object ID:  7B
     # of Zones:   1
     Zone Entry:  FF
-   Description: Pipe Exit Spring (CPZ)
+   Description: Unknown Spring
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5612,7 +5588,7 @@ Num Dependants:   0
      Object ID:  7D
     # of Zones:   1
     Zone Entry:  FF
-   Description: S1 Bonus Point Marker
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5624,7 +5600,7 @@ Num Dependants:   0
      Object ID:  7E
     # of Zones:   1
     Zone Entry:  FF
-   Description: Super Sonic Stars
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5660,7 +5636,7 @@ Num Dependants:   0
      Object ID:  81
     # of Zones:   1
     Zone Entry:  FF
-   Description: Invisible Vertical Barrier
+   Description: Unknown Vertical Barrier
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5732,7 +5708,7 @@ Num Dependants:   0
      Object ID:  87
     # of Zones:   1
     Zone Entry:  FF
-   Description: Special Stage Rings Number
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5744,7 +5720,7 @@ Num Dependants:   0
      Object ID:  88
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (Special Stage)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5768,7 +5744,7 @@ Num Dependants:   0
      Object ID:  8A
     # of Zones:   1
     Zone Entry:  FF
-   Description: S1 Intro Text
+   Description: Unknown Text
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5809,7 +5785,7 @@ Num Dependants:   0
   DefaultParam:   0
    DefaultFlag:   0
     DefaultDir:   0
- DefltRemember:   0
+ DefltRemember:   1
 Num Dependants:   0
      Num Types:   0
 
@@ -5828,7 +5804,7 @@ Num Dependants:   0
      Object ID:  8F
     # of Zones:   1
     Zone Entry:  FF
-   Description: Grounder Wall (ARZ)
+   Description: Unknown stationary badnik
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5840,7 +5816,7 @@ Num Dependants:   0
      Object ID:  90
     # of Zones:   1
     Zone Entry:  FF
-   Description: Grounder Rocks (ARZ)
+   Description: Unknown jumping badnik
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5852,7 +5828,7 @@ Num Dependants:   0
      Object ID:  91
     # of Zones:   1
     Zone Entry:  FF
-   Description: Chop Chop (shark) (ARZ)
+   Description: Unknown homing badnik
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5864,7 +5840,7 @@ Num Dependants:   0
      Object ID:  92
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spiker (HTZ)
+   Description: Unknown Projectile Launcher
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5876,7 +5852,7 @@ Num Dependants:   0
      Object ID:  93
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spiker Drill (HTZ)
+   Description: Unknown Spiraling Object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5924,7 +5900,7 @@ Num Dependants:   0
      Object ID:  97
     # of Zones:   1
     Zone Entry:  FF
-   Description: Rexon Head (HTZ)
+   Description: Unknown diagonal-moving Object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5936,7 +5912,7 @@ Num Dependants:   0
      Object ID:  98
     # of Zones:   1
     Zone Entry:  FF
-   Description: Fireball (SCZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5972,7 +5948,7 @@ Num Dependants:   0
      Object ID:  9B
     # of Zones:   1
     Zone Entry:  FF
-   Description: Turtloid rider (SCZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -5984,7 +5960,7 @@ Num Dependants:   0
      Object ID:  9C
     # of Zones:   1
     Zone Entry:  FF
-   Description: Balkiry's jet (SCZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6018,7 +5994,7 @@ Num Dependants:   0
      Object ID:  9E
     # of Zones:   1
     Zone Entry:  FF
-   Description: Crawlton (MCZ)
+   Description: Crawlton
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6030,7 +6006,7 @@ Num Dependants:   0
      Object ID:  9F
     # of Zones:   1
     Zone Entry:  FF
-   Description: Shellcraker (MTZ)
+   Description: Shellcracker (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6042,7 +6018,7 @@ Num Dependants:   0
      Object ID:  A0
     # of Zones:   1
     Zone Entry:  FF
-   Description: Shellcraker Claw (MTZ)
+   Description: Unknown falling object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6054,7 +6030,7 @@ Num Dependants:   0
      Object ID:  A1
     # of Zones:   1
     Zone Entry:  FF
-   Description: Slicer (MTZ)
+   Description: Slicer
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6066,7 +6042,7 @@ Num Dependants:   0
      Object ID:  A2
     # of Zones:   1
     Zone Entry:  FF
-   Description: Slicer Pincers (MTZ)
+   Description: Unknown falling object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6078,7 +6054,7 @@ Num Dependants:   0
      Object ID:  A3
     # of Zones:   1
     Zone Entry:  FF
-   Description: Flasher (MCZ)
+   Description: Flasher
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   1
@@ -6090,7 +6066,7 @@ Num Dependants:   0
      Object ID:  A4
     # of Zones:   1
     Zone Entry:  FF
-   Description: Asteron (MTZ)
+   Description: Asteron (MZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6102,7 +6078,7 @@ Num Dependants:   0
      Object ID:  A5
     # of Zones:   1
     Zone Entry:  FF
-   Description: Spiny (CNZ)
+   Description: Unknown back\forth projectile throwing object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6114,7 +6090,7 @@ Num Dependants:   0
      Object ID:  A6
     # of Zones:   1
     Zone Entry:  FF
-   Description: Wall Spiny (CNZ)
+   Description: Unknown up\down projectile firing object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6138,7 +6114,7 @@ Num Dependants:   0
      Object ID:  A8
     # of Zones:   1
     Zone Entry:  FF
-   Description: Grabber Legs (CPZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6150,7 +6126,7 @@ Num Dependants:   0
      Object ID:  A9
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (WTF)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6162,7 +6138,7 @@ Num Dependants:   0
      Object ID:  AA
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (WTF)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6198,7 +6174,7 @@ Num Dependants:   0
      Object ID:  AD
     # of Zones:   1
     Zone Entry:  FF
-   Description: Clucker Base (WFZ)
+   Description: Unknown badnik-like block
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6210,7 +6186,7 @@ Num Dependants:   0
      Object ID:  AE
     # of Zones:   1
     Zone Entry:  FF
-   Description: Clucker (WFZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6222,7 +6198,7 @@ Num Dependants:   0
      Object ID:  AF
     # of Zones:   1
     Zone Entry:  FF
-   Description: Metal Sonic (DEZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6234,7 +6210,7 @@ Num Dependants:   0
      Object ID:  B0
     # of Zones:   1
     Zone Entry:  FF
-   Description: Sega Screen
+   Description: Unknown art/palette-altering badnik
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6246,7 +6222,7 @@ Num Dependants:   0
      Object ID:  B1
     # of Zones:   1
     Zone Entry:  FF
-   Description: Sega Screen Sonic
+   Description: Unknown badnik
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6258,7 +6234,7 @@ Num Dependants:   0
      Object ID:  B2
     # of Zones:   1
     Zone Entry:  FF
-   Description: The Tornado
+   Description: Scene trigger (WFZ intro\outtro)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6270,7 +6246,7 @@ Num Dependants:   0
      Object ID:  B3
     # of Zones:   1
     Zone Entry:  FF
-   Description: Clouds (SCZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6282,7 +6258,7 @@ Num Dependants:   0
      Object ID:  B4
     # of Zones:   1
     Zone Entry:  FF
-   Description: Vertical Propeller (WFZ)
+   Description: Unknown badnik
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6294,7 +6270,7 @@ Num Dependants:   0
      Object ID:  B5
     # of Zones:   1
     Zone Entry:  FF
-   Description: Horizontal Propeller (WFZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6318,7 +6294,7 @@ Num Dependants:   0
      Object ID:  B7
     # of Zones:   1
     Zone Entry:  FF
-   Description: Huge Vertical Laser (WFZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6378,7 +6354,7 @@ Num Dependants:   0
      Object ID:  BC
     # of Zones:   1
     Zone Entry:  FF
-   Description: Robotnik Ship Jets (WFZ)
+   Description: Unknown flashing object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6390,7 +6366,7 @@ Num Dependants:   0
      Object ID:  BD
     # of Zones:   1
     Zone Entry:  FF
-   Description: Dropping Platforms (WFZ)
+   Description: Unknown drop spawning object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6414,7 +6390,7 @@ Num Dependants:   0
      Object ID:  BF
     # of Zones:   1
     Zone Entry:  FF
-   Description: Rotaty Stick Badnik (WFZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6426,7 +6402,7 @@ Num Dependants:   0
      Object ID:  C0
     # of Zones:   1
     Zone Entry:  FF
-   Description: Speed Launcher (WFZ)
+   Description: Handtruck launcher (WFZ)
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6462,7 +6438,7 @@ Num Dependants:   0
      Object ID:  C3
     # of Zones:   1
     Zone Entry:  FF
-   Description: Plane Smoke (WFZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6474,7 +6450,7 @@ Num Dependants:   0
      Object ID:  C4
     # of Zones:   1
     Zone Entry:  FF
-   Description: Plane Smoke (WFZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6510,7 +6486,7 @@ Num Dependants:   0
      Object ID:  C7
     # of Zones:   1
     Zone Entry:  FF
-   Description: Final Boss (DEZ)
+   Description: Final Boss
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6522,7 +6498,7 @@ Num Dependants:   0
      Object ID:  C8
     # of Zones:   1
     Zone Entry:  FF
-   Description: Crawl (CNZ)
+   Description: Crawl
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6534,7 +6510,7 @@ Num Dependants:   0
      Object ID:  C9
     # of Zones:   1
     Zone Entry:  FF
-   Description: Title palette changer
+   Description: Unknown palette changer
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6558,7 +6534,7 @@ Num Dependants:   0
      Object ID:  CB
     # of Zones:   1
     Zone Entry:  FF
-   Description: Ending Clouds
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6570,7 +6546,7 @@ Num Dependants:   0
      Object ID:  CC
     # of Zones:   1
     Zone Entry:  FF
-   Description: Rescue Plane Trigger
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6582,7 +6558,7 @@ Num Dependants:   0
      Object ID:  CD
     # of Zones:   1
     Zone Entry:  FF
-   Description: Ending Birds
+   Description: Unknown bobbing object
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6594,7 +6570,7 @@ Num Dependants:   0
      Object ID:  CE
     # of Zones:   1
     Zone Entry:  FF
-   Description: Ending Jumping Sonic and Tails
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6606,7 +6582,7 @@ Num Dependants:   0
      Object ID:  CF
     # of Zones:   1
     Zone Entry:  FF
-   Description: Ending Plane Helixes
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6618,7 +6594,7 @@ Num Dependants:   0
      Object ID:  D0
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (WTF)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6630,7 +6606,7 @@ Num Dependants:   0
      Object ID:  D1
     # of Zones:   1
     Zone Entry:  FF
-   Description: Unknown (WTF)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6654,7 +6630,7 @@ Num Dependants:   0
      Object ID:  D3
     # of Zones:   1
     Zone Entry:  FF
-   Description: Bomb Prize (CNZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
@@ -6762,7 +6738,7 @@ Num Dependants:   0
      Object ID:  DC
     # of Zones:   1
     Zone Entry:  FF
-   Description: Ring Prize (CNZ)
+   Description: Unknown
  Num Bitfields:   0
   DefaultParam:   0
    DefaultFlag:   0
