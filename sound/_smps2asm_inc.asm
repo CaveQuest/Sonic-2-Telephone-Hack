@@ -90,23 +90,6 @@ nMaxPSG2			EQU nB6
 			enum dLowPowerKickHit=dPowerKickHit+1,dLowerPowerKickHit,dLowestPowerKickHit
 		endif
 		; For conversions:
-		enum dKick=dKickS3
-		enum dSnare=dSnareS3
-		enum dClap=dClapS3
-		enum dScratch=dScratchS3
-		enum dTimpani=dHiTimpaniS3
-		enum dHiTom=dHighTom
-		enum dVLowClap=dFloorTomS3
-		enum dHiTimpani=dHiTimpaniS3
-		enum dMidTimpani=dMidTimpaniS3
-		enum dLowTimpani=dLowTimpaniS3
-		enum dVLowTimpani=dLowTimpaniS3
-		enum dMidTom=dMidTomS3
-		enum dLowTom=dLowTomS3
-		enum dFloorTom=dFloorTomS3
-		enum dHiClap=dHighTom
-		enum dMidClap=dMidTomS3
-		enum dLowClap=dLowTomS3
 		if (use_s2_samples<>0)
 			if (use_s3_samples<>0)||(use_sk_samples<>0)
 				enum dKick=dLowestPowerKickHit+1

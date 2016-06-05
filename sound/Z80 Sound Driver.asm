@@ -12,7 +12,7 @@
 ; ===========================================================================
 
 SonicDriverVer = 4
-use_s2_samples = 0
+use_s2_samples = 1
 use_s3_samples = 0
 use_sk_samples = 1
 use_s3d_samples = 0
@@ -150,11 +150,8 @@ Snd_Credits:		include 	"sound/Music/Credits.asm"
 ; ===========================================================================
 ; DAC Banks
 ; ===========================================================================
-; DAC Bank 1
-; ---------------------------------------------------------------------------
-DacBank1:			startBank
 
-DAC_Offsets:
+DAC_Offsets macro
 		DAC_Setup $04,DAC_81_Data
 		DAC_Setup $0E,DAC_82_83_84_85_Data
 		DAC_Setup $14,DAC_82_83_84_85_Data
@@ -186,6 +183,68 @@ DAC_Offsets:
 		DAC_Setup $18,DAC_9D_Data
 		DAC_Setup $18,DAC_9E_Data
 		DAC_Setup $0C,DAC_9F_Data
+		DAC_Setup $0C,DAC_A0_Data
+		DAC_Setup $0A,DAC_A1_Data
+		DAC_Setup $0A,DAC_A2_Data
+		DAC_Setup $18,DAC_A3_Data
+		DAC_Setup $18,DAC_A4_Data
+		DAC_Setup $0C,DAC_A5_Data
+		DAC_Setup $09,DAC_A6_Data
+		DAC_Setup $18,DAC_A7_Data
+		DAC_Setup $18,DAC_A8_Data
+		DAC_Setup $0C,DAC_A9_Data
+		DAC_Setup $0A,DAC_AA_Data
+		DAC_Setup $0D,DAC_AB_Data
+		DAC_Setup $06,DAC_AC_Data
+		DAC_Setup $10,DAC_AD_AE_Data
+		DAC_Setup $18,DAC_AD_AE_Data
+		DAC_Setup $09,DAC_AF_B0_Data
+		DAC_Setup $12,DAC_AF_B0_Data
+		DAC_Setup $18,DAC_B1_Data
+		DAC_Setup $16,DAC_B2_B3_Data
+		DAC_Setup $20,DAC_B2_B3_Data
+		DAC_Setup $0C,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup $0C,DAC_B5_Data
+		DAC_Setup $0C,DAC_B6_Data
+		DAC_Setup $18,DAC_B7_Data
+		DAC_Setup $0C,DAC_B8_B9_Data
+		DAC_Setup $0C,DAC_B8_B9_Data
+		DAC_Setup $18,DAC_BA_Data
+		DAC_Setup $18,DAC_BB_Data
+		DAC_Setup $18,DAC_BC_Data
+		DAC_Setup $0C,DAC_BD_Data
+		DAC_Setup $0C,DAC_BE_Data
+		DAC_Setup $1C,DAC_BF_Data
+		DAC_Setup $0B,DAC_C0_Data
+		DAC_Setup $0F,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup $11,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup $12,DAC_B4_C1_C2_C3_C4_Data
+		DAC_Setup $0B,DAC_B4_C1_C2_C3_C4_Data
+
+		DAC_Setup $17,SndDAC_Sample1
+		DAC_Setup $01,SndDAC_Sample2
+		DAC_Setup $06,SndDAC_Sample3
+		DAC_Setup $07,SndDAC_Sample4
+		DAC_Setup $1B,SndDAC_Sample5
+		DAC_Setup $0A,SndDAC_Sample6
+		DAC_Setup $1B,SndDAC_Sample7
+		DAC_Setup $12,SndDAC_Sample5
+		DAC_Setup $15,SndDAC_Sample5
+		DAC_Setup $1C,SndDAC_Sample5
+		DAC_Setup $1D,SndDAC_Sample5
+		DAC_Setup $02,SndDAC_Sample6
+		DAC_Setup $05,SndDAC_Sample6
+		DAC_Setup $08,SndDAC_Sample6
+		DAC_Setup $08,SndDAC_Sample7
+		DAC_Setup $0B,SndDAC_Sample7
+		DAC_Setup $12,SndDAC_Sample7
+	endm
+
+; ---------------------------------------------------------------------------
+; DAC Bank 1
+; ---------------------------------------------------------------------------
+DacBank1:			startBank
+	DAC_Offsets
 
 DAC_81_Data:			DACBINCLUDE "sound/DAC/81.bin"
 DAC_82_83_84_85_Data:		DACBINCLUDE "sound/DAC/82-85.bin"
@@ -212,55 +271,7 @@ DAC_9F_Data:			DACBINCLUDE "sound/DAC/9F.bin"
 ; Dac Bank 2
 ; ---------------------------------------------------------------------------
 DacBank2:	startBank
-		DAC_Null_Setup $04,DAC_Invalid
-		DAC_Null_Setup $0E,DAC_Invalid
-		DAC_Null_Setup $14,DAC_Invalid
-		DAC_Null_Setup $1A,DAC_Invalid
-		DAC_Null_Setup $20,DAC_Invalid
-		DAC_Null_Setup $04,DAC_Invalid
-		DAC_Null_Setup $04,DAC_Invalid
-		DAC_Null_Setup $06,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $14,DAC_Invalid
-		DAC_Null_Setup $1B,DAC_Invalid
-		DAC_Null_Setup $08,DAC_Invalid
-		DAC_Null_Setup $0B,DAC_Invalid
-		DAC_Null_Setup $11,DAC_Invalid
-		DAC_Null_Setup $08,DAC_Invalid
-		DAC_Null_Setup $03,DAC_Invalid
-		DAC_Null_Setup $07,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $0E,DAC_Invalid
-		DAC_Null_Setup $06,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $0D,DAC_Invalid
-		DAC_Null_Setup $12,DAC_Invalid
-		DAC_Null_Setup $0B,DAC_Invalid
-		DAC_Null_Setup $13,DAC_Invalid
-		DAC_Null_Setup $16,DAC_Invalid
-		DAC_Null_Setup $0C,DAC_Invalid
-		DAC_Setup $0A,DAC_9C_Data
-		DAC_Setup $18,DAC_9D_Data
-		DAC_Setup $18,DAC_9E_Data
-		DAC_Setup $0C,DAC_9F_Data
-		DAC_Setup $0C,DAC_A0_Data
-		DAC_Setup $0A,DAC_A1_Data
-		DAC_Setup $0A,DAC_A2_Data
-		DAC_Setup $18,DAC_A3_Data
-		DAC_Setup $18,DAC_A4_Data
-		DAC_Setup $0C,DAC_A5_Data
-		DAC_Setup $09,DAC_A6_Data
-		DAC_Setup $18,DAC_A7_Data
-		DAC_Setup $18,DAC_A8_Data
-		DAC_Setup $0C,DAC_A9_Data
-		DAC_Setup $0A,DAC_AA_Data
-		DAC_Setup $0D,DAC_AB_Data
-		DAC_Setup $06,DAC_AC_Data
-		DAC_Setup $10,DAC_AD_AE_Data
-		DAC_Setup $18,DAC_AD_AE_Data
-		DAC_Setup $09,DAC_AF_B0_Data
-		DAC_Setup $12,DAC_AF_B0_Data
-		DAC_Setup $18,DAC_B1_Data
+	DAC_Offsets
 
 DAC_A0_Data:			DACBINCLUDE "sound/DAC/A0.bin"
 DAC_A1_Data:			DACBINCLUDE "sound/DAC/A1.bin"
@@ -285,68 +296,7 @@ DAC_B1_Data:			DACBINCLUDE "sound/DAC/B1.bin"
 ; Dac Bank 3
 ; ---------------------------------------------------------------------------
 DacBank3:	startBank
-		DAC_Null_Setup $04,DAC_Invalid
-		DAC_Null_Setup $0E,DAC_Invalid
-		DAC_Null_Setup $14,DAC_Invalid
-		DAC_Null_Setup $1A,DAC_Invalid
-		DAC_Null_Setup $20,DAC_Invalid
-		DAC_Null_Setup $04,DAC_Invalid
-		DAC_Null_Setup $04,DAC_Invalid
-		DAC_Null_Setup $06,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $14,DAC_Invalid
-		DAC_Null_Setup $1B,DAC_Invalid
-		DAC_Null_Setup $08,DAC_Invalid
-		DAC_Null_Setup $0B,DAC_Invalid
-		DAC_Null_Setup $11,DAC_Invalid
-		DAC_Null_Setup $08,DAC_Invalid
-		DAC_Null_Setup $03,DAC_Invalid
-		DAC_Null_Setup $07,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $0E,DAC_Invalid
-		DAC_Null_Setup $06,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $0D,DAC_Invalid
-		DAC_Null_Setup $12,DAC_Invalid
-		DAC_Null_Setup $0B,DAC_Invalid
-		DAC_Null_Setup $13,DAC_Invalid
-		DAC_Null_Setup $16,DAC_Invalid
-		DAC_Null_Setup $0C,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $18,DAC_Invalid
-		DAC_Null_Setup $18,DAC_Invalid
-		DAC_Null_Setup $0C,DAC_Invalid
-		DAC_Null_Setup $09,DAC_Invalid
-		DAC_Null_Setup $18,DAC_Invalid
-		DAC_Null_Setup $18,DAC_Invalid
-		DAC_Null_Setup $0C,DAC_Invalid
-		DAC_Null_Setup $0A,DAC_Invalid
-		DAC_Null_Setup $0D,DAC_Invalid
-		DAC_Null_Setup $06,DAC_Invalid
-		DAC_Null_Setup $10,DAC_Invalid
-		DAC_Null_Setup $18,DAC_Invalid
-		DAC_Null_Setup $09,DAC_Invalid
-		DAC_Null_Setup $12,DAC_Invalid
-		DAC_Null_Setup $18,DAC_Invalid
-		DAC_Setup $16,DAC_B2_B3_Data
-		DAC_Setup $20,DAC_B2_B3_Data
-		DAC_Setup $0C,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $0C,DAC_B5_Data
-		DAC_Setup $0C,DAC_B6_Data
-		DAC_Setup $18,DAC_B7_Data
-		DAC_Setup $0C,DAC_B8_B9_Data
-		DAC_Setup $0C,DAC_B8_B9_Data
-		DAC_Setup $18,DAC_BA_Data
-		DAC_Setup $18,DAC_BB_Data
-		DAC_Setup $18,DAC_BC_Data
-		DAC_Setup $0C,DAC_BD_Data
-		DAC_Setup $0C,DAC_BE_Data
-		DAC_Setup $1C,DAC_BF_Data
-		DAC_Setup $0B,DAC_C0_Data
-		DAC_Setup $0F,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $11,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $12,DAC_B4_C1_C2_C3_C4_Data
-		DAC_Setup $0B,DAC_B4_C1_C2_C3_C4_Data
+	DAC_Offsets
 
 DAC_B2_B3_Data:			DACBINCLUDE "sound/DAC/B2-B3.bin"
 DAC_B4_C1_C2_C3_C4_Data:	DACBINCLUDE "sound/DAC/B4C1-C4.bin"
@@ -361,6 +311,14 @@ DAC_BD_Data:			DACBINCLUDE "sound/DAC/BD.bin"
 DAC_BE_Data:			DACBINCLUDE "sound/DAC/BE.bin"
 DAC_BF_Data:			DACBINCLUDE "sound/DAC/BF.bin"
 DAC_C0_Data:			DACBINCLUDE "sound/DAC/C0.bin"
+
+SndDAC_Sample1:			DACBINCLUDE "sound/DACS2/Sample 1.bin"
+SndDAC_Sample2:			DACBINCLUDE "sound/DACS2/Sample 2.bin"
+SndDAC_Sample3:			DACBINCLUDE "sound/DACS2/Sample 3.bin"
+SndDAC_Sample4:			DACBINCLUDE "sound/DACS2/Sample 4.bin"
+SndDAC_Sample5:			DACBINCLUDE "sound/DACS2/Sample 5.bin"
+SndDAC_Sample6:			DACBINCLUDE "sound/DACS2/Sample 6.bin"
+SndDAC_Sample7:			DACBINCLUDE "sound/DACS2/Sample 7.bin"
 
 	finishBank
 
@@ -924,6 +882,12 @@ DAC_Banks:
 		db		zmake68kBank(DAC_BC_Data)            ,zmake68kBank(DAC_BD_Data)            ,zmake68kBank(DAC_BE_Data)            ,zmake68kBank(DAC_BF_Data)
 		db		zmake68kBank(DAC_C0_Data)            ,zmake68kBank(DAC_B4_C1_C2_C3_C4_Data),zmake68kBank(DAC_B4_C1_C2_C3_C4_Data),zmake68kBank(DAC_B4_C1_C2_C3_C4_Data)
 		db		zmake68kBank(DAC_B4_C1_C2_C3_C4_Data)
+
+		db		zmake68kBank(SndDAC_Sample1)         ,zmake68kBank(SndDAC_Sample2)         ,zmake68kBank(SndDAC_Sample3)         ,zmake68kBank(SndDAC_Sample4)
+		db		zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample6)         ,zmake68kBank(SndDAC_Sample7)         ,zmake68kBank(SndDAC_Sample5)
+		db		zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample5)         ,zmake68kBank(SndDAC_Sample6)
+		db		zmake68kBank(SndDAC_Sample6)         ,zmake68kBank(SndDAC_Sample6)         ,zmake68kBank(SndDAC_Sample7)         ,zmake68kBank(SndDAC_Sample7)
+		db		zmake68kBank(SndDAC_Sample7)
 
 ; =============== S U B	R O U T	I N E =======================================
 ;
@@ -4568,13 +4532,6 @@ zPlaySEGAPCM:
 
 .done:
 		jp	zPlayDigitalAudio				; Go back to normal DAC code
-; ---------------------------------------------------------------------------
-		db 0
-
-	if $ > 1300h
-		fatal "Your Z80 code won't fit before its tables. It's \{$-1300h}h bytes past the start of music data \{1300h}h"
-	endif
-z80_SoundDriverEnd:
 
 ; ===========================================================================
 ; Pointers
@@ -4906,7 +4863,6 @@ z80_UniVoiceBank:
 		fatal "Your Z80 tables won't fit before its variables. It's \{$-zDataStart}h bytes past the start of the variables, at \{zDataStart}h"
 	endif
 
-z80_SoundDriverPointersEnd:
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
 ; END OF SOUND DRIVER
@@ -4914,8 +4870,6 @@ z80_SoundDriverPointersEnd:
 		restore
 		padding off
 		!org		z80_SoundDriver+Size_of_Snd_driver_guess
-
-Z80_Snd_Driver_End:
 
 		;align $10
 
