@@ -50,7 +50,7 @@ nMaxPSG2			EQU nB6
 		enum sTone_1F=sTone_1E+1,sTone_20,sTone_21,sTone_22,sTone_23,sTone_24
 		enum sTone_25=sTone_24+1,sTone_26,sTone_27
 		; For conversions:
-		enum fTone_01=$01,fTone_02,fTone_03,fTone_04,fTone_05,fTone_06
+		enum fTone_01=sTone_27+1,fTone_02,fTone_03,fTone_04,fTone_05,fTone_06
 		enum fTone_07=fTone_06+1,fTone_08,fTone_09,fTone_0A,fTone_0B,fTone_0C
 		enum fTone_0D=fTone_0C+1
 		if SonicDriverVer>=5

@@ -10,9 +10,9 @@ EHZ_Header:
 	smpsHeaderFM        EHZ_FM3,	$00, $16
 	smpsHeaderFM        EHZ_FM4,	$00, $20
 	smpsHeaderFM        EHZ_FM5,	$00, $25
-	smpsHeaderPSG       EHZ_PSG1,	$DC, $04, $00, sTone_03
-	smpsHeaderPSG       EHZ_PSG2,	$DC, $04, $00, sTone_01
-	smpsHeaderPSG       EHZ_PSG3,	$00, $02, $00, sTone_02
+	smpsHeaderPSG       EHZ_PSG1,	$DC, $04, $00, fTone_03
+	smpsHeaderPSG       EHZ_PSG2,	$DC, $04, $00, fTone_01
+	smpsHeaderPSG       EHZ_PSG3,	$00, $02, $00, fTone_02
 
 ; FM5 Data
 EHZ_FM5:
@@ -229,7 +229,7 @@ EHZ_PSG1:
 
 EHZ_Jump05:
 	smpsAlterPitch      $0C
-	smpsPSGvoice        sTone_0B
+	smpsPSGvoice        fTone_0B
 	smpsPSGAlterVol     $02
 
 EHZ_Loop0B:
@@ -237,17 +237,17 @@ EHZ_Loop0B:
 	dc.b	$20
 	smpsLoop            $00, $04, EHZ_Loop0B
 	dc.b	nRst, $20, nRst
-	smpsPSGvoice        sTone_08
+	smpsPSGvoice        fTone_08
 	smpsPSGAlterVol     $FF
 	dc.b	nRst, nB5, $02, nRst, $06, nC6, $04, nB5, $08
 	smpsPSGAlterVol     $FF
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	smpsPSGAlterVol     $03
 	dc.b	nB5, $04, nRst, $04
 	smpsPSGAlterVol     $03
 	dc.b	nB5, $02, nRst, $02
 	smpsPSGAlterVol     $FA
-	smpsPSGvoice        sTone_08
+	smpsPSGvoice        fTone_08
 	smpsAlterPitch      $F4
 	dc.b	nRst, $20, nRst, nC6, $04, nRst, nC6, $10, nA5, $08, nRst, $20
 	dc.b	nRst, nRst
@@ -255,7 +255,7 @@ EHZ_Loop0B:
 	smpsPSGAlterVol     $01
 	dc.b	nRst, nB5, $02, nRst, $06, nC6, $04, nB5, $08
 	smpsPSGAlterVol     $FF
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	smpsPSGAlterVol     $03
 	dc.b	nB5, $04, nRst, $04
 	smpsPSGAlterVol     $03
@@ -271,7 +271,7 @@ EHZ_PSG2:
 
 EHZ_Jump04:
 	smpsPSGAlterVol     $03
-	smpsPSGvoice        sTone_0B
+	smpsPSGvoice        fTone_0B
 	smpsAlterNote       $00
 
 EHZ_Loop0A:
@@ -286,7 +286,7 @@ EHZ_Loop0A:
 	smpsPSGAlterVol     $01
 	dc.b	nRst, nB5, $02, nRst, $06, nC6, $04, nB5, $08
 	smpsPSGAlterVol     $FF
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	smpsPSGAlterVol     $03
 	dc.b	nB5, $04, nRst, $04
 	smpsPSGAlterVol     $03
@@ -297,7 +297,7 @@ EHZ_Loop0A:
 	smpsPSGAlterVol     $01
 	dc.b	nRst, nB5, $02, nRst, $06, nC6, $04, nB5, $08
 	smpsPSGAlterVol     $FF
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	smpsPSGAlterVol     $03
 	dc.b	nB5, $04, nRst, $04
 	smpsPSGAlterVol     $03
@@ -309,7 +309,7 @@ EHZ_Loop0A:
 ; PSG3 Data
 EHZ_PSG3:
 	smpsPSGform         $E7
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	dc.b	nRst, $08, nMaxPSG, $10, nMaxPSG, nMaxPSG, nMaxPSG, $08, nRst, $20, nRst
 
 EHZ_Loop07:
@@ -318,18 +318,18 @@ EHZ_Loop07:
 	smpsLoop            $00, $07, EHZ_Loop07
 	dc.b	nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG
 	dc.b	nMaxPSG, $08
-	smpsPSGvoice        sTone_03
+	smpsPSGvoice        fTone_03
 	dc.b	nMaxPSG
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 
 EHZ_Loop08:
 	dc.b	nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG
 	dc.b	nMaxPSG, $08, $04, nMaxPSG
 	smpsLoop            $00, $07, EHZ_Loop08
 	dc.b	nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG
-	smpsPSGvoice        sTone_03
+	smpsPSGvoice        fTone_03
 	dc.b	nMaxPSG, $08
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	dc.b	nMaxPSG, $04, nMaxPSG
 
 EHZ_Loop09:
@@ -337,24 +337,24 @@ EHZ_Loop09:
 	dc.b	nMaxPSG, $08, nMaxPSG, $04, nMaxPSG
 	smpsLoop            $00, $03, EHZ_Loop09
 	dc.b	nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG
-	smpsPSGvoice        sTone_03
+	smpsPSGvoice        fTone_03
 	dc.b	nMaxPSG, $08
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	dc.b	nMaxPSG, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG
 	dc.b	$08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG
 	dc.b	$08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG
-	smpsPSGvoice        sTone_03
+	smpsPSGvoice        fTone_03
 	dc.b	nMaxPSG, $08
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	dc.b	nMaxPSG, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG, $08, $04, nMaxPSG, nMaxPSG
 	dc.b	$08, $04, nMaxPSG
-	smpsPSGvoice        sTone_03
+	smpsPSGvoice        fTone_03
 	dc.b	nMaxPSG, $08
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	dc.b	nMaxPSG, $04, nMaxPSG
-	smpsPSGvoice        sTone_01
+	smpsPSGvoice        fTone_01
 	dc.b	nMaxPSG, $10, nMaxPSG, nMaxPSG, nMaxPSG
-	smpsPSGvoice        sTone_02
+	smpsPSGvoice        fTone_02
 	smpsJump            EHZ_Loop07
 
 ; DAC Data
