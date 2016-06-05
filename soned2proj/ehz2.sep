@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\EHZ_2.bin
 
 Objects:       ..\level\objects\EHZ_2.bin
 Rings:         ..\level\rings\EHZ_2.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

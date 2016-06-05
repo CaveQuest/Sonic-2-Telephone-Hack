@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\WFZ.bin
 
 Objects:       ..\level\objects\WFZ_1.bin
 Rings:         ..\level\rings\WFZ_1.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

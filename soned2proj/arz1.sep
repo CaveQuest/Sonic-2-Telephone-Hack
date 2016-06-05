@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\ARZ_1.bin
 
 Objects:       ..\level\objects\ARZ_1.bin
 Rings:         ..\level\rings\ARZ_1.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

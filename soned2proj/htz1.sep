@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\HTZ_1.bin
 
 Objects:       ..\level\objects\HTZ_1.bin
 Rings:         ..\level\rings\HTZ_1.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

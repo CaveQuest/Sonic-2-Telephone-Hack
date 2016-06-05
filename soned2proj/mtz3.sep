@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\MTZ_3.bin
 
 Objects:       ..\level\objects\MTZ_3.bin
 Rings:         ..\level\rings\MTZ_3.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

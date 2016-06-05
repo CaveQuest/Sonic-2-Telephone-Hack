@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\CNZ_1.bin
 
 Objects:       ..\level\objects\CNZ_1.bin
 Rings:         ..\level\rings\CNZ_1.bin
+Rings Format:          2
 Misc:          ..\level\objects\CNZ 1 bumpers.bin
 
 Palettes-

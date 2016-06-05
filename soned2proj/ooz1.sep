@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\OOZ_1.bin
 
 Objects:       ..\level\objects\OOZ_1.bin
 Rings:         ..\level\rings\OOZ_1.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

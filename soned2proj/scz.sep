@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\SCZ.bin
 
 Objects:       ..\level\objects\SCZ_1.bin
 Rings:         ..\level\rings\SCZ_1.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

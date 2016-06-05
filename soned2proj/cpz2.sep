@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\CPZ_2.bin
 
 Objects:       ..\level\objects\CPZ_2.bin
 Rings:         ..\level\rings\CPZ_2.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-

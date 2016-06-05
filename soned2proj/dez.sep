@@ -15,6 +15,7 @@ Level Layout:  ..\level\layout\DEZ.bin
 
 Objects:       ..\level\objects\DEZ_1.bin
 Rings:         ..\level\rings\DEZ_1.bin
+Rings Format:          2
 Misc:          NONE
 
 Palettes-
