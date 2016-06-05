@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Namespace="S2ObjectDefinitions.ARZ" TypeName="Barrier" Language="cs" Name="One-way Barrier" Image="img1" RememberState="false">
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Name="One-Way Barrier" Image="img4" DefaultSubtype="03">
   <Images>
     <ImageFromMappings id="img1">
       <ArtFile filename="../art/nemesis/One way barrier from ARZ.bin" />
@@ -19,9 +19,9 @@
     </ImageFromMappings>
   </Images>
   <Subtypes>
-    <Subtype id="00" name="Default" image="img1" />
-    <Subtype id="01" name="" image="img2" />
-    <Subtype id="02" name="" image="img3" />
-    <Subtype id="03" name="" image="img4" />
+    <Subtype id="00" name="Hill Top" image="img1" />
+    <Subtype id="01" name="Metropolis" image="img2" />
+    <Subtype id="02" name="Chemical Plant/Death Egg" image="img3" />
+    <Subtype id="03" name="Aquatic Ruin" image="img4" />
   </Subtypes>
 </ObjDef>
