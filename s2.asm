@@ -23,7 +23,7 @@ padToPowerOfTwo = 1
 skipChecksumCheck = 0
 ;	| If 1, disables the unnecessary (and slow) bootup checksum calculation
 ;
-zeroOffsetOptimization = 0
+zeroOffsetOptimization = 1
 ;	| If 1, makes a handful of zero-offset instructions smaller
 ;
 assembleZ80SoundDriver = 1
