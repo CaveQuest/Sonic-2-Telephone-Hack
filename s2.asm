@@ -30,6 +30,13 @@ assembleZ80SoundDriver = 1
 ;	| If 1, the Z80 sound driver is assembled with the rest of the rom
 ;	| If 0, the Z80 sound driver is BINCLUDEd (less flexible)
 
+Max_Rings = 511 ; default. maximum number possible is 759
+    if Max_Rings > 759
+    fatal "Maximum number of rings possible is 759"
+    endif
+
+Rings_Space = (Max_Rings+1)*2
+
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; AS-specific macros and assembler settings
 	CPU 68000
@@ -155,7 +162,14 @@ Horiz_Scroll_Buf =		ramaddr( $FFFFE000 )
 Sonic_Stat_Record_Buf =		ramaddr( $FFFFE400 )
 Sonic_Pos_Record_Buf =		ramaddr( $FFFFE500 )
 Tails_Pos_Record_Buf =		ramaddr( $FFFFE600 )
+Ring_start_addr_RAM =		ramaddr( $FFFFE7FC )
+Ring_start_addr_RAM_P2 =	ramaddr( $FFFFE7FE )
 Ring_Positions =		ramaddr( $FFFFE800 )
+Ring_start_addr_ROM =		ramaddr( Ring_Positions+Rings_Space )
+Ring_end_addr_ROM =		ramaddr( Ring_Positions+Rings_Space+4 )
+Ring_start_addr_ROM_P2 =	ramaddr( Ring_Positions+Rings_Space+8 )
+Ring_end_addr_ROM_P2 =		ramaddr( Ring_Positions+Rings_Space+12 )
+Ring_free_RAM_start =		ramaddr( Ring_Positions+Rings_Space+16 )
 Camera_RAM =			ramaddr( $FFFFEE00 )
 Camera_X_pos =			ramaddr( $FFFFEE00 )
 Camera_Y_pos =			ramaddr( $FFFFEE04 )
@@ -4517,7 +4531,7 @@ Level_ClrRam:
 	clearRAM $FFFFF628,$58
 	clearRAM Misc_Variables,$100
 	clearRAM $FFFFFE60,$50
-	clearRAM $FFFFE700,$100
+	clearRAM $FFFFE700,$4
 
 	cmpi.w	#$D01,(Current_ZoneAndAct).w	; CPZ 2
 	beq.s	Level_InitWater
@@ -23803,7 +23817,7 @@ return_12AB8:
 
 loc_12ABA:
 	lea	(byte_12C52).l,a3
-	moveq	#$11,d2
+	moveq	#(((byte_12C52_end-byte_12C52)/6)-1),d2
 
 loc_12AC2:
 	movea.w	(a3)+,a1
@@ -23933,13 +23947,26 @@ loc_12C3C:
 ; ===========================================================================
 ; unknown
 byte_12C52:
-	dc.b $B0,  8,$B0,$48,  0,$1B,$F7,$6E,$F7,$8C,  0,  0,$FC,  0,$F7,$8E
-	dc.b   0,  0,$F7,$70,$F7,$78,  0,  3,$F7,$60,$FE,$C0,  0,  2,$F7,$12; 16
-	dc.b $F7,$16,  0,  1,$F7,$1C,$F7,$24,  0,  3,$EE,  0,$EE,$20,  0, $F; 32
-	dc.b $F7,$DA,$F7,$DC,  0,  0,$EE,$C8,$EE,$F8,  0,  3,$EE,$D0,$EE,$D4; 48
-	dc.b   0,  1,$EE,$D8,$EE,$DA,  0,  0,$EE,$40,$EE,$48,  0,  3,$EE,$50; 64
-	dc.b $EE,$58,  0,  3,$EE,$60,$EE,$80,  0, $F,$EE,$A0,$EE,$A8,  0,  3; 80
-	dc.b $EE,$B0,$EE,$B8,  0,  1,$E5,  0,$E6,  0,  0,$7F; 96
+	dc.w $B008, $B048, $1B
+	dc.w $F76E, $F78C, 0
+	dc.w $FC00, $F78E, 0
+	dc.w $F770, $F778, 3
+	dc.w $F760, $FEC0, 2
+	dc.w Ring_start_addr_RAM, Ring_start_addr_RAM_P2, 0
+	dc.w Ring_start_addr_ROM, Ring_start_addr_ROM_P2, 3
+	dc.w $F71C, $F724, 3
+	dc.w $EE00, $EE20, $F
+	dc.w $F7DA, $F7DC, 0
+	dc.w $EEC8, $EEF8, 3
+	dc.w $EED0, $EED4, 1
+	dc.w $EED8, $EEDA, 0
+	dc.w $EE40, $EE48, 3
+	dc.w $EE50, $EE58, 3
+	dc.w $EE60, $EE80, $F
+	dc.w $EEA0, $EEA8, 3
+	dc.w $EEB0, $EEB8, 1
+	dc.w $E500, $E600, $7F
+byte_12C52_end:
 ; ===========================================================================
 
 qmark_monitor:
@@ -28782,572 +28809,7 @@ JmpTo_loc_409C6
 
 
 ; ===========================================================================
-; ----------------------------------------------------------------------------
-; Pseudo-object that manages where rings are placed onscreen
-; as you move through the level, and otherwise updates them.
-; ----------------------------------------------------------------------------
-
-; loc_16F88:
-RingsManager:
-	moveq	#0,d0
-	move.b	($FFFFF710).w,d0
-	move.w	RingsManager_States(pc,d0.w),d0
-	jmp	RingsManager_States(pc,d0.w)
-; ===========================================================================
-; off_16F96:
-RingsManager_States:
-	dc.w RingsManager_Init - RingsManager_States
-	dc.w RingsManager_Main - RingsManager_States
-; ===========================================================================
-; loc_16F9A:
-RingsManager_Init:
-	addq.b	#2,($FFFFF710).w ; => RingsManager_Main
-	bsr.w	loc_172A4
-	lea	(Ring_Positions).w,a1
-	move.w	(Camera_X_pos).w,d4
-	subq.w	#8,d4
-	bhi.s	loc_16FB6
-	moveq	#1,d4
-	bra.s	loc_16FB6
-; ===========================================================================
-
-loc_16FB2:
-	lea	6(a1),a1
-
-loc_16FB6:
-	cmp.w	2(a1),d4
-	bhi.s	loc_16FB2
-	move.w	a1,($FFFFF712).w
-	move.w	a1,($FFFFF716).w
-	addi.w	#$150,d4
-	bra.s	loc_16FCE
-; ===========================================================================
-
-loc_16FCA:
-	lea	6(a1),a1
-
-loc_16FCE:
-	cmp.w	2(a1),d4
-	bhi.s	loc_16FCA
-	move.w	a1,($FFFFF714).w
-	move.w	a1,($FFFFF718).w
-	rts
-; ===========================================================================
-; loc_16FDE:
-RingsManager_Main:
-	lea	($FFFFEF80).w,a2
-	move.w	(a2)+,d1
-	subq.w	#1,d1
-	bcs.s	loc_17014
-
-loc_16FE8:
-	move.w	(a2)+,d0
-	beq.s	loc_16FE8
-	movea.w	d0,a1
-	subq.b	#1,(a1)
-	bne.s	loc_17010
-	move.b	#6,(a1)
-	addq.b	#1,1(a1)
-	cmpi.b	#8,1(a1)
-	bne.s	loc_17010
-	move.w	#-1,(a1)
-	move.w	#0,-2(a2)
-	subq.w	#1,($FFFFEF80).w
-
-loc_17010:
-	dbf	d1,loc_16FE8
-
-loc_17014:
-	movea.w	($FFFFF712).w,a1
-	move.w	(Camera_X_pos).w,d4
-	subq.w	#8,d4
-	bhi.s	loc_17028
-	moveq	#1,d4
-	bra.s	loc_17028
-; ===========================================================================
-
-loc_17024:
-	lea	6(a1),a1
-
-loc_17028:
-	cmp.w	2(a1),d4
-	bhi.s	loc_17024
-	bra.s	loc_17032
-; ===========================================================================
-
-loc_17030:
-	subq.w	#6,a1
-
-loc_17032:
-	cmp.w	-4(a1),d4
-	bls.s	loc_17030
-	move.w	a1,($FFFFF712).w
-	movea.w	($FFFFF714).w,a2
-	addi.w	#$150,d4
-	bra.s	loc_1704A
-; ===========================================================================
-
-loc_17046:
-	lea	6(a2),a2
-
-loc_1704A:
-	cmp.w	2(a2),d4
-	bhi.s	loc_17046
-	bra.s	loc_17054
-; ===========================================================================
-
-loc_17052:
-	subq.w	#6,a2
-
-loc_17054:
-	cmp.w	-4(a2),d4
-	bls.s	loc_17052
-	move.w	a2,($FFFFF714).w
-	tst.w	(Two_player_mode).w
-	bne.s	loc_1706E
-	move.w	a1,($FFFFF716).w
-	move.w	a2,($FFFFF718).w
-	rts
-; ===========================================================================
-
-loc_1706E:
-	movea.w	($FFFFF716).w,a1
-	move.w	($FFFFEE20).w,d4
-	subq.w	#8,d4
-	bhi.s	loc_17082
-	moveq	#1,d4
-	bra.s	loc_17082
-; ===========================================================================
-
-loc_1707E:
-	lea	6(a1),a1
-
-loc_17082:
-	cmp.w	2(a1),d4
-	bhi.s	loc_1707E
-	bra.s	loc_1708C
-; ===========================================================================
-
-loc_1708A:
-	subq.w	#6,a1
-
-loc_1708C:
-	cmp.w	-4(a1),d4
-	bls.s	loc_1708A
-	move.w	a1,($FFFFF716).w
-	movea.w	($FFFFF718).w,a2
-	addi.w	#$150,d4
-	bra.s	loc_170A4
-; ===========================================================================
-
-loc_170A0:
-	lea	6(a2),a2
-
-loc_170A4:
-	cmp.w	2(a2),d4
-	bhi.s	loc_170A0
-	bra.s	loc_170AE
-; ===========================================================================
-
-loc_170AC:
-	subq.w	#6,a2
-
-loc_170AE:
-	cmp.w	-4(a2),d4
-	bls.s	loc_170AC
-	move.w	a2,($FFFFF718).w
-	rts
-; ===========================================================================
-
-loc_170BA:
-	movea.w	($FFFFF712).w,a1
-	movea.w	($FFFFF714).w,a2
-	cmpa.w	#MainCharacter,a0
-	beq.s	loc_170D0
-	movea.w	($FFFFF716).w,a1
-	movea.w	($FFFFF718).w,a2
-
-loc_170D0:
-	cmpa.l	a1,a2
-	beq.w	return_17166
-	cmpi.w	#$5A,invulnerable_time(a0)
-	bcc.w	return_17166
-	move.w	x_pos(a0),d2
-	move.w	y_pos(a0),d3
-	subi.w	#8,d2
-	moveq	#0,d5
-	move.b	y_radius(a0),d5
-	subq.b	#3,d5
-	sub.w	d5,d3
-	cmpi.b	#$4D,mapping_frame(a0)
-	bne.s	loc_17104
-	addi.w	#$C,d3
-	moveq	#$A,d5
-
-loc_17104:
-	move.w	#6,d1
-	move.w	#$C,d6
-	move.w	#$10,d4
-	add.w	d5,d5
-
-loc_17112:
-	tst.w	(a1)
-	bne.w	loc_1715C
-	move.w	2(a1),d0
-	sub.w	d1,d0
-	sub.w	d2,d0
-	bcc.s	loc_1712A
-	add.w	d6,d0
-	bcs.s	loc_17130
-	bra.w	loc_1715C
-; ===========================================================================
-
-loc_1712A:
-	cmp.w	d4,d0
-	bhi.w	loc_1715C
-
-loc_17130:
-	move.w	4(a1),d0
-	sub.w	d1,d0
-	sub.w	d3,d0
-	bcc.s	loc_17142
-	add.w	d6,d0
-	bcs.s	loc_17148
-	bra.w	loc_1715C
-; ===========================================================================
-
-loc_17142:
-	cmp.w	d5,d0
-	bhi.w	loc_1715C
-
-loc_17148:
-	move.w	#$604,(a1)
-	bsr.s	loc_17168
-	lea	($FFFFEF82).w,a3
-
-loc_17152:
-	tst.w	(a3)+
-	bne.s	loc_17152
-	move.w	a1,-(a3)
-	addq.w	#1,($FFFFEF80).w
-
-loc_1715C:
-	lea	6(a1),a1
-	cmpa.l	a1,a2
-	bne.w	loc_17112
-
-return_17166:
-	rts
-; ===========================================================================
-
-loc_17168:
-	subq.w	#1,(Perfect_rings_left).w
-	cmpa.w	#MainCharacter,a0
-	beq.w	loc_11FC8
-	bra.w	loc_1201E
-; ===========================================================================
-
-loc_17178:
-	movea.w	($FFFFF712).w,a0
-	movea.w	($FFFFF714).w,a4
-	cmpa.l	a0,a4
-	bne.s	loc_17186
-	rts
-; ===========================================================================
-
-loc_17186:
-	lea	(Camera_X_pos).w,a3
-
-loc_1718A:
-	tst.w	(a0)
-	bmi.w	loc_171EC
-	move.w	2(a0),d3
-	sub.w	(a3),d3
-	addi.w	#$80,d3
-	move.w	4(a0),d2
-	sub.w	4(a3),d2
-	andi.w	#$7FF,d2
-	addi.w	#8,d2
-	bmi.s	loc_171EC
-	cmpi.w	#$F0,d2
-	bge.s	loc_171EC
-	addi.w	#$78,d2
-	lea	(off_1736A).l,a1
-	moveq	#0,d1
-	move.b	1(a0),d1
-	bne.s	loc_171C8
-	move.b	(Rings_anim_frame).w,d1
-
-loc_171C8:
-	add.w	d1,d1
-	adda.w	(a1,d1.w),a1
-	move.b	(a1)+,d0
-	ext.w	d0
-	add.w	d2,d0
-	move.w	d0,(a2)+
-	move.b	(a1)+,(a2)+
-	addq.b	#1,d5
-	move.b	d5,(a2)+
-	move.w	(a1)+,d0
-	addi.w	#$26BC,d0
-	move.w	d0,(a2)+
-	addq.w	#2,a1
-	move.w	(a1)+,d0
-	add.w	d3,d0
-	move.w	d0,(a2)+
-
-loc_171EC:
-	lea	6(a0),a0
-	cmpa.l	a0,a4
-	bne.w	loc_1718A
-	rts
-; ===========================================================================
-
-loc_171F8:
-	lea	(Camera_X_pos).w,a3
-	move.w	#$78,d6
-	movea.w	($FFFFF712).w,a0
-	movea.w	($FFFFF714).w,a4
-	cmpa.l	a0,a4
-	bne.s	loc_17224
-	rts
-; ===========================================================================
-
-loc_1720E:
-	lea	($FFFFEE20).w,a3
-	move.w	#$158,d6
-	movea.w	($FFFFF716).w,a0
-	movea.w	($FFFFF718).w,a4
-	cmpa.l	a0,a4
-	bne.s	loc_17224
-	rts
-; ===========================================================================
-
-loc_17224:
-	tst.w	(a0)
-	bmi.w	loc_17288
-	move.w	2(a0),d3
-	sub.w	(a3),d3
-	addi.w	#$80,d3
-	move.w	4(a0),d2
-	sub.w	4(a3),d2
-	andi.w	#$7FF,d2
-	addi.w	#$88,d2
-	bmi.s	loc_17288
-	cmpi.w	#$170,d2
-	bge.s	loc_17288
-	add.w	d6,d2
-	lea	(off_1736A).l,a1
-	moveq	#0,d1
-	move.b	1(a0),d1
-	bne.s	loc_17260
-	move.b	(Rings_anim_frame).w,d1
-
-loc_17260:
-	add.w	d1,d1
-	adda.w	(a1,d1.w),a1
-	move.b	(a1)+,d0
-	ext.w	d0
-	add.w	d2,d0
-	move.w	d0,(a2)+
-	move.b	(a1)+,d4
-	move.b	byte_17294(pc,d4.w),(a2)+
-	addq.b	#1,d5
-	move.b	d5,(a2)+
-	addq.w	#2,a1
-	move.w	(a1)+,d0
-	addi.w	#$235E,d0
-	move.w	d0,(a2)+
-	move.w	(a1)+,d0
-	add.w	d3,d0
-	move.w	d0,(a2)+
-
-loc_17288:
-	lea	6(a0),a0
-	cmpa.l	a0,a4
-	bne.w	loc_17224
-	rts
-; ===========================================================================
-; unknown
-byte_17294:
-	dc.b   0,0	; 1
-	dc.b   1,1	; 3
-	dc.b   4,4	; 5
-	dc.b   5,5	; 7
-	dc.b   8,8	; 9
-	dc.b   9,9	; 11
-	dc.b  $C,$C	; 13
-	dc.b  $D,$D	; 15
-; ===========================================================================
-
-loc_172A4:
-	clearRAM Ring_Positions,$600
-	; d0 = 0
-	lea	($FFFFEF80).w,a1
-	move.w	#bytesToLcnt($40),d1
--	move.l	d0,(a1)+
-	dbf	d1,-
-
-	moveq	#0,d5
-	moveq	#0,d0
-	move.w	(Current_ZoneAndAct).w,d0
-	ror.b	#1,d0
-	lsr.w	#6,d0
-	lea	(Off_Rings).l,a1
-	move.w	(a1,d0.w),d0
-	lea	(a1,d0.w),a1
-	lea	($FFFFE806).w,a2
-
-loc_172E0:
-	move.w	(a1)+,d2
-	bmi.s	loc_17328
-	move.w	(a1)+,d3
-	bmi.s	loc_17308
-	move.w	d3,d0
-	rol.w	#4,d0
-	andi.w	#7,d0
-	andi.w	#$FFF,d3
-
-loc_172F4:
-	move.w	#0,(a2)+
-	move.w	d2,(a2)+
-	move.w	d3,(a2)+
-	addi.w	#$18,d2
-	addq.w	#1,d5
-	dbf	d0,loc_172F4
-	bra.s	loc_172E0
-; ===========================================================================
-
-loc_17308:
-	move.w	d3,d0
-	rol.w	#4,d0
-	andi.w	#7,d0
-	andi.w	#$FFF,d3
-
-loc_17314:
-	move.w	#0,(a2)+
-	move.w	d2,(a2)+
-	move.w	d3,(a2)+
-	addi.w	#$18,d3
-	addq.w	#1,d5
-	dbf	d0,loc_17314
-	bra.s	loc_172E0
-; ===========================================================================
-
-loc_17328:
-	move.w	d5,(Perfect_rings_left).w
-	move.w	#0,($FFFFFF42).w
-	moveq	#-1,d0
-	move.l	d0,(a2)+
-	lea	($FFFFE802).w,a1
-	move.w	#$FE,d3
-
-loc_1733E:
-	move.w	d3,d4
-	lea	6(a1),a2
-	move.w	(a1),d0
-
-loc_17346:
-	tst.w	(a2)
-	beq.s	loc_17358
-	cmp.w	(a2),d0
-	bls.s	loc_17358
-	move.l	(a1),d1
-	move.l	(a2),d0
-	move.l	d0,(a1)
-	move.l	d1,(a2)
-	swap	d0
-
-loc_17358:
-	lea	6(a2),a2
-	dbf	d4,loc_17346
-	lea	6(a1),a1
-	dbf	d3,loc_1733E
-	rts
-; ===========================================================================
-off_1736A:
-	dc.w byte_1737A-off_1736A
-	dc.w byte_17382-off_1736A; 1
-	dc.w byte_1738A-off_1736A; 2
-	dc.w byte_17392-off_1736A; 3
-	dc.w byte_1739A-off_1736A; 4
-	dc.w byte_173A2-off_1736A; 5
-	dc.w byte_173AA-off_1736A; 6
-	dc.w byte_173B2-off_1736A; 7
-byte_1737A:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b   0	; 2
-	dc.b   0	; 3
-	dc.b   0	; 4
-	dc.b   0	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-byte_17382:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b   0	; 2
-	dc.b   4	; 3
-	dc.b   0	; 4
-	dc.b   2	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-byte_1738A:
-	dc.b $F8
-	dc.b   1	; 1
-	dc.b   0	; 2
-	dc.b   8	; 3
-	dc.b   0	; 4
-	dc.b   4	; 5
-	dc.b $FF	; 6
-	dc.b $FC	; 7
-byte_17392:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b   8	; 2
-	dc.b   4	; 3
-	dc.b   8	; 4
-	dc.b   2	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-byte_1739A:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b   0	; 2
-	dc.b  $A	; 3
-	dc.b   0	; 4
-	dc.b   5	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-byte_173A2:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b $18	; 2
-	dc.b  $A	; 3
-	dc.b $18	; 4
-	dc.b   5	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-byte_173AA:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b   8	; 2
-	dc.b  $A	; 3
-	dc.b   8	; 4
-	dc.b   5	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-byte_173B2:
-	dc.b $F8
-	dc.b   5	; 1
-	dc.b $10	; 2
-	dc.b  $A	; 3
-	dc.b $10	; 4
-	dc.b   5	; 5
-	dc.b $FF	; 6
-	dc.b $F8	; 7
-	dc.b   0	; 8
-	dc.b   0	; 9
+	include "ringsmanager.asm"
 ; ===========================================================================
 
 

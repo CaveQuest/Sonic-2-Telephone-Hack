@@ -1,2 +1,1 @@
 The new EHZ is littered with leftover objects from the original EHZ
-The new EHZ uses so many rings, it causes Ring_Positions to overflow, and lock the camera (max rings in S2 is 256; EHZ uses 372. Maybe port S3K ring manager?)
