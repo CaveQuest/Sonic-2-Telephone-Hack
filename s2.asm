@@ -13957,39 +13957,39 @@ loc_C1C2:
 ; appear at when the level starts.
 ; --------------------------------------------------------------------------------------
 WrdArr_StartLoc:
-	dc.w	$60,	$28F	; $00
+	binclude	"startpos/EHZ_1.bin"	; $00
+	binclude	"startpos/EHZ_2.bin"
+	dc.w	$60,	$28F		; $01
 	dc.w	$60,	$2AF
-	dc.w	$60,	$28F	; $01
-	dc.w	$60,	$2AF
-	dc.w	$60,	$1AC	; $02
+	dc.w	$60,	$1AC		; $02
 	dc.w	$60,	$1AC
-	dc.w	$60,	$28F	; $03
+	dc.w	$60,	$28F		; $03
 	dc.w	$60,	$2AF
-	dc.w	$60,	$28C	; $04
-	dc.w	$60,	$5EC
-	dc.w	$60,	$20C	; $05
+	binclude	"startpos/MTZ_1.bin"	; $04
+	binclude	"startpos/MTZ_2.bin"
+	binclude	"startpos/MTZ_3.bin"	; $05
 	dc.w	$60,	$2AF
-	dc.w	$60,	$4CC	; $06
+	binclude	"startpos/WFZ.bin"	; $06
 	dc.w	$1E0,	$4CC
-	dc.w	$60,	$3EF	; $07
-	dc.w	$60,	$6AF
-	dc.w	$230,	$1AC	; $08
+	binclude	"startpos/HTZ_1.bin"	; $07
+	binclude	"startpos/HTZ_2.bin"
+	dc.w	$230,	$1AC		; $08
 	dc.w	$230,	$1AC
-	dc.w	$60,	$28F	; $09
+	dc.w	$60,	$28F		; $09
 	dc.w	$60,	$2AF
-	dc.w	$60,	$6AC	; $0A
-	dc.w	$60,	$56C
-	dc.w	$60,	$6AC	; $0B
-	dc.w	$60,	$5AC
-	dc.w	$60,	$2AC	; $0C
-	dc.w	$60,	$58C
-	dc.w	$60,	$1EC	; $0D
-	dc.w	$60,	$12C
-	dc.w	$60,	$12D	; $0E
+	binclude	"startpos/OOZ_1.bin"	; $0A
+	binclude	"startpos/OOZ_2.bin"
+	binclude	"startpos/MCZ_1.bin"	; $0B
+	binclude	"startpos/MCZ_2.bin"
+	binclude	"startpos/CNZ_1.bin"	; $0C
+	binclude	"startpos/CNZ_2.bin"
+	binclude	"startpos/CPZ_1.bin"	; $0D
+	binclude	"startpos/CPZ_2.bin"
+	binclude	"startpos/DEZ.bin"	; $0E
 	dc.w	$60,	$12D
-	dc.w	$60,	$37E	; $0F
-	dc.w	$60,	$37E
-	dc.w	$120,	$70	; $10
+	binclude	"startpos/ARZ_1.bin"	; $0F
+	binclude	"startpos/ARZ_2.bin"
+	binclude	"startpos/SCZ.bin"	; $10
 	dc.w	$140,	$70
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
