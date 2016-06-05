@@ -196,5 +196,6 @@ Title_screen_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $05
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $97, $2C, $27
+	;smpsVcTotalLevel    $00, $97, $2C, $27
+	smpsVcTotalLevel    $00, $17, $2C, $27
 

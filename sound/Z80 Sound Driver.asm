@@ -88,7 +88,6 @@ DAC_Null_Chain macro rate,dacptr,linkptr
 ; ===========================================================================
 ; Music Banks
 ; ===========================================================================
-	cnop -Size_of_Snd_Bank1, $8000	; aligned to end of bank
 
 ; ---------------------------------------------------------------------------
 ; Music Bank 1
@@ -866,8 +865,8 @@ MusID_1UP				= 98h
 MusID_Emerald			= 9Dh
 MusID__End				= 0A0h
 SndID__First			= MusID__End
-SndID_Ring				= SndID__First
-SndID_Spindash			= 0E0h
+SndID_Ring				= SndID__First+15h
+SndID_Spindash			= 0FFh;0E0h
 SndID__FirstContinuous	= 0FFh
 MusID_SKCredits			= 0FFh
 SndID__End				= 0F0h
@@ -2468,11 +2467,14 @@ zPSGInitBytes:
 ;loc_6A9
 zPlaySound_CheckRing:
 		sub	SndID__First					; Make it a 0-based index
-		or	a								; Is it the ring sound?
+		cp	SndID_Ring-SndID__First								; Is it the ring sound?
 		jp	nz, zPlaySound_Bankswitch		; Branch if not
 		ld	a, (zRingSpeaker)				; Get speaker on which ring sound is played
 		xor	1								; Toggle bit 0
 		ld	(zRingSpeaker), a				; Save it
+		ld	a,2Eh
+		jr	nz,zPlaySound_Bankswitch
+		ld	a,15h
 
 ;loc_6B7
 zPlaySound_Bankswitch:
@@ -5023,34 +5025,6 @@ z80_SFXPointers:
 		dw	zmake68kPtr(Sound_7C),zmake68kPtr(Sound_7D),zmake68kPtr(Sound_7E),zmake68kPtr(Sound_7F)
 
 		dw	zmake68kPtr(Sound_80),zmake68kPtr(Sound_81),zmake68kPtr(Sound_82),zmake68kPtr(Sound_83)
-		dw	zmake68kPtr(Sound_84),zmake68kPtr(Sound_85),zmake68kPtr(Sound_86),zmake68kPtr(Sound_87)
-		dw	zmake68kPtr(Sound_88),zmake68kPtr(Sound_89),zmake68kPtr(Sound_8A),zmake68kPtr(Sound_8B)
-		dw	zmake68kPtr(Sound_8C),zmake68kPtr(Sound_8D),zmake68kPtr(Sound_8E),zmake68kPtr(Sound_8F)
-
-		dw	zmake68kPtr(Sound_90),zmake68kPtr(Sound_91),zmake68kPtr(Sound_92),zmake68kPtr(Sound_93)
-		dw	zmake68kPtr(Sound_94),zmake68kPtr(Sound_95),zmake68kPtr(Sound_96),zmake68kPtr(Sound_97)
-		dw	zmake68kPtr(Sound_98),zmake68kPtr(Sound_99),zmake68kPtr(Sound_9A),zmake68kPtr(Sound_9B)
-		dw	zmake68kPtr(Sound_9C),zmake68kPtr(Sound_9D),zmake68kPtr(Sound_9E),zmake68kPtr(Sound_9F)
-
-		dw	zmake68kPtr(Sound_A0),zmake68kPtr(Sound_A1),zmake68kPtr(Sound_A2),zmake68kPtr(Sound_A3)
-		dw	zmake68kPtr(Sound_A4),zmake68kPtr(Sound_A5),zmake68kPtr(Sound_A6),zmake68kPtr(Sound_A7)
-		dw	zmake68kPtr(Sound_A8),zmake68kPtr(Sound_A9),zmake68kPtr(Sound_AA),zmake68kPtr(Sound_AB)
-		dw	zmake68kPtr(Sound_AC),zmake68kPtr(Sound_AD),zmake68kPtr(Sound_AE),zmake68kPtr(Sound_AF)
-
-		dw	zmake68kPtr(Sound_B0),zmake68kPtr(Sound_B1),zmake68kPtr(Sound_B2),zmake68kPtr(Sound_B3)
-		dw	zmake68kPtr(Sound_B4),zmake68kPtr(Sound_B5),zmake68kPtr(Sound_B6),zmake68kPtr(Sound_B7)
-		dw	zmake68kPtr(Sound_B8),zmake68kPtr(Sound_B9),zmake68kPtr(Sound_BA),zmake68kPtr(Sound_BB)
-		dw	zmake68kPtr(Sound_BC),zmake68kPtr(Sound_BD),zmake68kPtr(Sound_BE),zmake68kPtr(Sound_BF)
-
-		dw	zmake68kPtr(Sound_C0),zmake68kPtr(Sound_C1),zmake68kPtr(Sound_C2),zmake68kPtr(Sound_C3)
-		dw	zmake68kPtr(Sound_C4),zmake68kPtr(Sound_C5),zmake68kPtr(Sound_C6),zmake68kPtr(Sound_C7)
-		dw	zmake68kPtr(Sound_C8),zmake68kPtr(Sound_C9),zmake68kPtr(Sound_CA),zmake68kPtr(Sound_CB)
-		dw	zmake68kPtr(Sound_CC),zmake68kPtr(Sound_CD),zmake68kPtr(Sound_CE),zmake68kPtr(Sound_CF)
-
-		dw	zmake68kPtr(Sound_D0),zmake68kPtr(Sound_D1),zmake68kPtr(Sound_D2),zmake68kPtr(Sound_D3)
-		dw	zmake68kPtr(Sound_D4),zmake68kPtr(Sound_D5),zmake68kPtr(Sound_D6),zmake68kPtr(Sound_D7)
-		dw	zmake68kPtr(Sound_D8),zmake68kPtr(Sound_D9),zmake68kPtr(Sound_DA),zmake68kPtr(Sound_DB)
-		dw	zmake68kPtr(Sound_DB),zmake68kPtr(Sound_DB),zmake68kPtr(Sound_DB),zmake68kPtr(Sound_DB)
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
 ; FM Universal Voice Bank
@@ -5193,174 +5167,86 @@ SndBank:			startBank
 SEGA_PCM:	binclude "sound/Sega PCM.bin"
 SEGA_PCM_End
 		align 2
-Sound_33:	binclude "sound/SFX/33.bin"
-Sound_34:	binclude "sound/SFX/34.bin"
-Sound_35:	binclude "sound/SFX/35.bin"
-Sound_36:	binclude "sound/SFX/36.bin"
-Sound_37:	binclude "sound/SFX/37.bin"
-Sound_38:	binclude "sound/SFX/38.bin"
-Sound_39:	binclude "sound/SFX/39.bin"
-Sound_3A:	binclude "sound/SFX/3A.bin"
-Sound_3B:	binclude "sound/SFX/3B.bin"
-Sound_3C:	binclude "sound/SFX/3C.bin"
-Sound_3D:	binclude "sound/SFX/3D.bin"
-Sound_3E:	binclude "sound/SFX/3E.bin"
-Sound_3F:	binclude "sound/SFX/3F.bin"
-Sound_40:	binclude "sound/SFX/40.bin"
-Sound_41:	binclude "sound/SFX/41.bin"
-Sound_42:	binclude "sound/SFX/42.bin"
-Sound_43:	binclude "sound/SFX/43.bin"
-Sound_44:	binclude "sound/SFX/44.bin"
-Sound_45:	binclude "sound/SFX/45.bin"
-Sound_46:	binclude "sound/SFX/46.bin"
-Sound_47:	binclude "sound/SFX/47.bin"
-Sound_48:	binclude "sound/SFX/48.bin"
-Sound_49:	binclude "sound/SFX/49.bin"
-Sound_4A:	binclude "sound/SFX/4A.bin"
-Sound_4B:	binclude "sound/SFX/4B.bin"
-Sound_4C:	binclude "sound/SFX/4C.bin"
-Sound_4D:	binclude "sound/SFX/4D.bin"
-Sound_4E:	binclude "sound/SFX/4E.bin"
-Sound_4F:	binclude "sound/SFX/4F.bin"
-Sound_50:	binclude "sound/SFX/50.bin"
-Sound_51:	binclude "sound/SFX/51.bin"
-Sound_52:	binclude "sound/SFX/52.bin"
-Sound_53:	binclude "sound/SFX/53.bin"
-Sound_54:	binclude "sound/SFX/54.bin"
-Sound_55:	binclude "sound/SFX/55.bin"
-Sound_56:	binclude "sound/SFX/56.bin"
-Sound_57:	binclude "sound/SFX/57.bin"
-Sound_58:	binclude "sound/SFX/58.bin"
-Sound_59:	binclude "sound/SFX/59.bin"
-Sound_5A:	binclude "sound/SFX/5A.bin"
-Sound_5B:	binclude "sound/SFX/5B.bin"
-Sound_5C:	binclude "sound/SFX/5C.bin"
-Sound_5D:	binclude "sound/SFX/5D.bin"
-Sound_5E:	binclude "sound/SFX/5E.bin"
-Sound_5F:	binclude "sound/SFX/5F.bin"
-Sound_60:	binclude "sound/SFX/60.bin"
-Sound_61:	binclude "sound/SFX/61.bin"
-Sound_62:	binclude "sound/SFX/62.bin"
-Sound_63:	binclude "sound/SFX/63.bin"
-Sound_64:	binclude "sound/SFX/64.bin"
-Sound_65:	binclude "sound/SFX/65.bin"
-Sound_66:	binclude "sound/SFX/66.bin"
-Sound_67:	binclude "sound/SFX/67.bin"
-Sound_68:	binclude "sound/SFX/68.bin"
-Sound_69:	binclude "sound/SFX/69.bin"
-Sound_6A:	binclude "sound/SFX/6A.bin"
-Sound_6B:	binclude "sound/SFX/6B.bin"
-Sound_6C:	binclude "sound/SFX/6C.bin"
-Sound_6D:	binclude "sound/SFX/6D.bin"
-Sound_6E:	binclude "sound/SFX/6E.bin"
-Sound_6F:	binclude "sound/SFX/6F.bin"
-Sound_70:	binclude "sound/SFX/70.bin"
-Sound_71:	binclude "sound/SFX/71.bin"
-Sound_72:	binclude "sound/SFX/72.bin"
-Sound_73:	binclude "sound/SFX/73.bin"
-Sound_74:	binclude "sound/SFX/74.bin"
-Sound_75:	binclude "sound/SFX/75.bin"
-Sound_76:	binclude "sound/SFX/76.bin"
-Sound_77:	binclude "sound/SFX/77.bin"
-Sound_78:	binclude "sound/SFX/78.bin"
-Sound_79:	binclude "sound/SFX/79.bin"
-Sound_7A:	binclude "sound/SFX/7A.bin"
-Sound_7B:	binclude "sound/SFX/7B.bin"
-Sound_7C:	binclude "sound/SFX/7C.bin"
-Sound_7D:	binclude "sound/SFX/7D.bin"
-Sound_7E:	binclude "sound/SFX/7E.bin"
-Sound_7F:	binclude "sound/SFX/7F.bin"
-Sound_80:	binclude "sound/SFX/80.bin"
-Sound_81:	binclude "sound/SFX/81.bin"
-Sound_82:	binclude "sound/SFX/82.bin"
-Sound_83:	binclude "sound/SFX/83.bin"
-Sound_84:	binclude "sound/SFX/84.bin"
-Sound_85:	binclude "sound/SFX/85.bin"
-Sound_86:	binclude "sound/SFX/86.bin"
-Sound_87:	binclude "sound/SFX/87.bin"
-Sound_88:	binclude "sound/SFX/88.bin"
-Sound_89:	binclude "sound/SFX/89.bin"
-Sound_8A:	binclude "sound/SFX/8A.bin"
-Sound_8B:	binclude "sound/SFX/8B.bin"
-Sound_8C:	binclude "sound/SFX/8C.bin"
-Sound_8D:	binclude "sound/SFX/8D.bin"
-Sound_8E:	binclude "sound/SFX/8E.bin"
-Sound_8F:	binclude "sound/SFX/8F.bin"
-Sound_90:	binclude "sound/SFX/90.bin"
-Sound_91:	binclude "sound/SFX/91.bin"
-Sound_92:	binclude "sound/SFX/92.bin"
-Sound_93:	binclude "sound/SFX/93.bin"
-Sound_94:	binclude "sound/SFX/94.bin"
-Sound_95:	binclude "sound/SFX/95.bin"
-Sound_96:	binclude "sound/SFX/96.bin"
-Sound_97:	binclude "sound/SFX/97.bin"
-Sound_98:	binclude "sound/SFX/98.bin"
-Sound_99:	binclude "sound/SFX/99.bin"
-Sound_9A:	binclude "sound/SFX/9A.bin"
-Sound_9B:	binclude "sound/SFX/9B.bin"
-Sound_9C:	binclude "sound/SFX/9C.bin"
-Sound_9D:	binclude "sound/SFX/9D.bin"
-Sound_9E:	binclude "sound/SFX/9E.bin"
-Sound_9F:	binclude "sound/SFX/9F.bin"
-Sound_A0:	binclude "sound/SFX/A0.bin"
-Sound_A1:	binclude "sound/SFX/A1.bin"
-Sound_A2:	binclude "sound/SFX/A2.bin"
-Sound_A3:	binclude "sound/SFX/A3.bin"
-Sound_A4:	binclude "sound/SFX/A4.bin"
-Sound_A5:	binclude "sound/SFX/A5.bin"
-Sound_A6:	binclude "sound/SFX/A6.bin"
-Sound_A7:	binclude "sound/SFX/A7.bin"
-Sound_A8:	binclude "sound/SFX/A8.bin"
-Sound_A9:	binclude "sound/SFX/A9.bin"
-Sound_AA:	binclude "sound/SFX/AA.bin"
-Sound_AB:	binclude "sound/SFX/AB.bin"
-Sound_AC:	binclude "sound/SFX/AC.bin"
-Sound_AD:	binclude "sound/SFX/AD.bin"
-Sound_AE:	binclude "sound/SFX/AE.bin"
-Sound_AF:	binclude "sound/SFX/AF.bin"
-Sound_B0:	binclude "sound/SFX/B0.bin"
-Sound_B1:	binclude "sound/SFX/B1.bin"
-Sound_B2:	binclude "sound/SFX/B2.bin"
-Sound_B3:	binclude "sound/SFX/B3.bin"
-Sound_B4:	binclude "sound/SFX/B4.bin"
-Sound_B5:	binclude "sound/SFX/B5.bin"
-Sound_B6:	binclude "sound/SFX/B6.bin"
-Sound_B7:	binclude "sound/SFX/B7.bin"
-Sound_B8:	binclude "sound/SFX/B8.bin"
-Sound_B9:	binclude "sound/SFX/B9.bin"
-Sound_BA:	binclude "sound/SFX/BA.bin"
-Sound_BB:	binclude "sound/SFX/BB.bin"
-Sound_BC:	binclude "sound/SFX/BC.bin"
-Sound_BD:	binclude "sound/SFX/BD.bin"
-Sound_BE:	binclude "sound/SFX/BE.bin"
-Sound_BF:	binclude "sound/SFX/BF.bin"
-Sound_C0:	binclude "sound/SFX/C0.bin"
-Sound_C1:	binclude "sound/SFX/C1.bin"
-Sound_C2:	binclude "sound/SFX/C2.bin"
-Sound_C3:	binclude "sound/SFX/C3.bin"
-Sound_C4:	binclude "sound/SFX/C4.bin"
-Sound_C5:	binclude "sound/SFX/C5.bin"
-Sound_C6:	binclude "sound/SFX/C6.bin"
-Sound_C7:	binclude "sound/SFX/C7.bin"
-Sound_C8:	binclude "sound/SFX/C8.bin"
-Sound_C9:	binclude "sound/SFX/C9.bin"
-Sound_CA:	binclude "sound/SFX/CA.bin"
-Sound_CB:	binclude "sound/SFX/CB.bin"
-Sound_CC:	binclude "sound/SFX/CC.bin"
-Sound_CD:	binclude "sound/SFX/CD.bin"
-Sound_CE:	binclude "sound/SFX/CE.bin"
-Sound_CF:	binclude "sound/SFX/CF.bin"
-Sound_D0:	binclude "sound/SFX/D0.bin"
-Sound_D1:	binclude "sound/SFX/D1.bin"
-Sound_D2:	binclude "sound/SFX/D2.bin"
-Sound_D3:	binclude "sound/SFX/D3.bin"
-Sound_D4:	binclude "sound/SFX/D4.bin"
-Sound_D5:	binclude "sound/SFX/D5.bin"
-Sound_D6:	binclude "sound/SFX/D6.bin"
-Sound_D7:	binclude "sound/SFX/D7.bin"
-Sound_D8:	binclude "sound/SFX/D8.bin"
-Sound_D9:	binclude "sound/SFX/D9.bin"
-Sound_DA:	binclude "sound/SFX/DA.bin"
-Sound_DB:	binclude "sound/SFX/DB.bin"
+Sound_33:	include "sound/SFX/Sound20.asm"
+Sound_34:	include "sound/SFX/Sound21.asm"
+Sound_35:	include "sound/SFX/Sound22.asm"
+Sound_36:	include "sound/SFX/Sound23.asm"
+Sound_37:	include "sound/SFX/Sound24.asm"
+Sound_38:	include "sound/SFX/Sound25.asm"
+Sound_39:	include "sound/SFX/Sound26.asm"
+Sound_3A:	include "sound/SFX/Sound27.asm"
+Sound_3B:	include "sound/SFX/Sound28.asm"
+Sound_3C:	include "sound/SFX/Sound29.asm"
+Sound_3D:	include "sound/SFX/Sound2A.asm"
+Sound_3E:	include "sound/SFX/Sound2B.asm"
+Sound_3F:	include "sound/SFX/Sound2C.asm"
+Sound_40:	include "sound/SFX/Sound2D.asm"
+Sound_41:	include "sound/SFX/Sound2E.asm"
+Sound_42:	include "sound/SFX/Sound2F.asm"
+Sound_43:	include "sound/SFX/Sound30.asm"
+Sound_44:	include "sound/SFX/Sound31.asm"
+Sound_45:	include "sound/SFX/Sound32.asm"
+Sound_46:	include "sound/SFX/Sound33.asm"
+Sound_47:	include "sound/SFX/Sound34.asm"
+Sound_48:	include "sound/SFX/Sound35.asm"
+Sound_49:	include "sound/SFX/Sound36.asm"
+Sound_4A:	include "sound/SFX/Sound37.asm"
+Sound_4B:	include "sound/SFX/Sound38.asm"
+Sound_4C:	include "sound/SFX/Sound39.asm"
+Sound_4D:	include "sound/SFX/Sound3A.asm"
+Sound_4E:	include "sound/SFX/Sound3B.asm"
+Sound_4F:	include "sound/SFX/Sound3C.asm"
+Sound_50:	include "sound/SFX/Sound3D.asm"
+Sound_51:	include "sound/SFX/Sound3E.asm"
+Sound_52:	include "sound/SFX/Sound3F.asm"
+Sound_53:	include "sound/SFX/Sound40.asm"
+Sound_54:	include "sound/SFX/Sound41.asm"
+Sound_55:	include "sound/SFX/Sound42.asm"
+Sound_56:	include "sound/SFX/Sound43.asm"
+Sound_57:	include "sound/SFX/Sound44.asm"
+Sound_58:	include "sound/SFX/Sound45.asm"
+Sound_59:	include "sound/SFX/Sound46.asm"
+Sound_5A:	include "sound/SFX/Sound47.asm"
+Sound_5B:	include "sound/SFX/Sound48.asm"
+Sound_5C:	include "sound/SFX/Sound49.asm"
+Sound_5D:	include "sound/SFX/Sound4A.asm"
+Sound_5E:	include "sound/SFX/Sound4B.asm"
+Sound_5F:	include "sound/SFX/Sound4C.asm"
+Sound_60:	include "sound/SFX/Sound4D.asm"
+Sound_61:	include "sound/SFX/Sound4E.asm"
+Sound_62:	include "sound/SFX/Sound4F.asm"
+Sound_63:	include "sound/SFX/Sound50.asm"
+Sound_64:	include "sound/SFX/Sound51.asm"
+Sound_65:	include "sound/SFX/Sound52.asm"
+Sound_66:	include "sound/SFX/Sound53.asm"
+Sound_67:	include "sound/SFX/Sound54.asm"
+Sound_68:	include "sound/SFX/Sound55.asm"
+Sound_69:	include "sound/SFX/Sound56.asm"
+Sound_6A:	include "sound/SFX/Sound57.asm"
+Sound_6B:	include "sound/SFX/Sound58.asm"
+Sound_6C:	include "sound/SFX/Sound59.asm"
+Sound_6D:	include "sound/SFX/Sound5A.asm"
+Sound_6E:	include "sound/SFX/Sound5B.asm"
+Sound_6F:	include "sound/SFX/Sound5C.asm"
+Sound_70:	include "sound/SFX/Sound5D.asm"
+Sound_71:	include "sound/SFX/Sound5E.asm"
+Sound_72:	include "sound/SFX/Sound5F.asm"
+Sound_73:	include "sound/SFX/Sound60.asm"
+Sound_74:	include "sound/SFX/Sound61.asm"
+Sound_75:	include "sound/SFX/Sound62.asm"
+Sound_76:	include "sound/SFX/Sound63.asm"
+Sound_77:	include "sound/SFX/Sound64.asm"
+Sound_78:	include "sound/SFX/Sound65.asm"
+Sound_79:	include "sound/SFX/Sound66.asm"
+Sound_7A:	include "sound/SFX/Sound67.asm"
+Sound_7B:	include "sound/SFX/Sound68.asm"
+Sound_7C:	include "sound/SFX/Sound69.asm"
+Sound_7D:	include "sound/SFX/Sound6A.asm"
+Sound_7E:	include "sound/SFX/Sound6B.asm"
+Sound_7F:	include "sound/SFX/Sound6C.asm"
+Sound_80:	include "sound/SFX/Sound6D.asm"
+Sound_81:	include "sound/SFX/Sound6E.asm"
+Sound_82:	include "sound/SFX/Sound6F.asm"
+Sound_83:	include "sound/SFX/Sound70.asm"
 
 	finishBank

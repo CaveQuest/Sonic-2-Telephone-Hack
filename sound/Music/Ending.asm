@@ -409,5 +409,6 @@ Ending_Voices:
 	smpsVcDecayRate2    $12, $03, $02, $02
 	smpsVcDecayLevel    $02, $02, $02, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $02, $24, $9F, $29
+	;smpsVcTotalLevel    $02, $24, $9F, $29
+	smpsVcTotalLevel    $02, $24, $1F, $29
 
