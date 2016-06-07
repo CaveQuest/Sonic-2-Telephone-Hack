@@ -1,0 +1,2 @@
+The new EHZ is littered with leftover objects from the original EHZ
+The new EHZ has so many collision problems X_X, sides are only top-solid, so you can walking thorough them, and fall to your death
